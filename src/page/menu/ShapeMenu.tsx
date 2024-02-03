@@ -12,7 +12,7 @@ import {
 } from '../config/GlobalVariabel';
 
 type ShapeMenuProps = {
-  handleShapeSelect: (value: string) => void;
+  handleShapeSelect: (value: modeCanvas) => void;
 };
 
 export default function ShapeMenu({ handleShapeSelect }: ShapeMenuProps) {
@@ -23,7 +23,7 @@ export default function ShapeMenu({ handleShapeSelect }: ShapeMenuProps) {
         className={classIcon.active}
         type="button"
         onClick={() => {
-          handleShapeSelect(modeCanvas[modeCanvas.RECT]);
+          handleShapeSelect('RECT');
         }}
       >
         <MdOutlineRectangle color={colorIcon.nonActive} size={sizeIcon.size} />
@@ -33,7 +33,7 @@ export default function ShapeMenu({ handleShapeSelect }: ShapeMenuProps) {
         className={classIcon.active}
         type="button"
         onClick={() => {
-          handleShapeSelect(modeCanvas[modeCanvas.CIRCLE]);
+          handleShapeSelect('RECT');
         }}
       >
         <MdOutlineCircle color={colorIcon.nonActive} size={sizeIcon.size} />
@@ -43,7 +43,7 @@ export default function ShapeMenu({ handleShapeSelect }: ShapeMenuProps) {
         className={classIcon.active}
         type="button"
         onClick={() => {
-          handleShapeSelect(modeCanvas[modeCanvas.TRIAGLE]);
+          handleShapeSelect('TRIAGLE');
         }}
       >
         <IoTriangleOutline color={colorIcon.nonActive} size={sizeIcon.size} />
@@ -53,7 +53,7 @@ export default function ShapeMenu({ handleShapeSelect }: ShapeMenuProps) {
         className={classIcon.active}
         type="button"
         onClick={() => {
-          handleShapeSelect(modeCanvas[modeCanvas.STAR]);
+          handleShapeSelect('STAR');
         }}
       >
         <MdOutlineStarBorder color={colorIcon.nonActive} size={sizeIcon.size} />

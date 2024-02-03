@@ -1,3 +1,5 @@
+import { modeCanvas } from '../config/GlobalVariabel';
+
 export type TypeComponenCanvasProps =
   | 'RECT'
   | 'CIRCLE'
@@ -27,6 +29,7 @@ export type DataCircleProps = {
 };
 
 export type LineProps = {
+  id: string;
   points: Array<number>;
   stroke: string;
   strokeWidth: number;
@@ -46,7 +49,7 @@ export type AllSaveDataProps = {
 };
 
 export type FreeBrushCanvasProps = {
-  drag: string;
+  drag: modeCanvas;
   sizeBrush: number;
   colorBrush: string;
   handleSendScale: (value: number) => void;

@@ -1,13 +1,12 @@
-export enum modeCanvas {
-  BRUSH,
-  PAN,
-  ERASER,
-  SHAPES,
-  RECT,
-  TRIAGLE,
-  CIRCLE,
-  STAR,
-}
+export type modeCanvas =
+  | 'BRUSH'
+  | 'PAN'
+  | 'ERASER'
+  | 'SHAPES'
+  | 'RECT'
+  | 'TRIAGLE'
+  | 'CIRCLE'
+  | 'STAR';
 
 export const defaultBrushAdd = 0.6;
 

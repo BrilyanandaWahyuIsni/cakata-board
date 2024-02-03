@@ -6,14 +6,12 @@ import { modePointerWindows } from './config/AppConfig';
 import MainColor from './menu/MainColor';
 
 export default function HomeCanvas() {
-  const [modeTypeCanvas, setModeTypeCanvas] = useState<string>(
-    modeCanvas[modeCanvas.BRUSH],
-  );
+  const [modeTypeCanvas, setModeTypeCanvas] = useState<modeCanvas>('BRUSH');
   const [scaleCanvas, setScaleCanvas] = useState<number>(1);
   const [sizeBrush, setSizeBrush] = useState<number>(4);
   const [colorBrush, setColorBrush] = useState<string>('black');
 
-  const handleValue = (value: string) => {
+  const handleValue = (value: modeCanvas) => {
     setModeTypeCanvas(value);
   };
 
@@ -35,9 +33,9 @@ export default function HomeCanvas() {
     if (e.code === 'BracketLeft') setSizeBrush(prev => prev - defaultBrushAdd);
     if (e.code === 'BracketRight') setSizeBrush(prev => prev + defaultBrushAdd);
 
-    if (e.code === 'KeyP') setModeTypeCanvas(modeCanvas[modeCanvas.PAN]);
-    if (e.code === 'KeyB') setModeTypeCanvas(modeCanvas[modeCanvas.BRUSH]);
-    if (e.code === 'KeyE') setModeTypeCanvas(modeCanvas[modeCanvas.ERASER]);
+    if (e.code === 'KeyP') setModeTypeCanvas('PAN');
+    if (e.code === 'KeyB') setModeTypeCanvas('BRUSH');
+    if (e.code === 'KeyE') setModeTypeCanvas('ERASER');
   };
 
   useEffect(() => {
@@ -60,7 +58,7 @@ export default function HomeCanvas() {
         handleValue={e => handleValue(e)}
         modeTypeCanvas={modeTypeCanvas}
       />
-      {modeTypeCanvas === modeCanvas[modeCanvas.BRUSH] && (
+      {modeTypeCanvas === 'BRUSH' && (
         <MainColor handleSendColor={handleChangeColor} />
       )}
       <FreeBrushCanvas

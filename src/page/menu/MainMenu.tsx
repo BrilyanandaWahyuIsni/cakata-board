@@ -11,8 +11,8 @@ import {
 import ShapeMenu from './ShapeMenu';
 
 type MainMenuProps = {
-  modeTypeCanvas: string;
-  handleValue: (value: string) => void;
+  modeTypeCanvas: modeCanvas;
+  handleValue: (value: modeCanvas) => void;
 };
 
 export default function MainMenu({
@@ -26,13 +26,11 @@ export default function MainMenu({
         <button
           className={classIcon.active}
           type="button"
-          onClick={() => handleValue(modeCanvas[modeCanvas.PAN])}
+          onClick={() => handleValue('PAN')}
         >
           <MdOutlinePanTool
             color={
-              modeTypeCanvas === modeCanvas[modeCanvas.PAN]
-                ? colorIcon.active
-                : colorIcon.nonActive
+              modeTypeCanvas === 'PAN' ? colorIcon.active : colorIcon.nonActive
             }
             size={sizeIcon.size}
           />
@@ -41,11 +39,11 @@ export default function MainMenu({
         <button
           className={classIcon.active}
           type="button"
-          onClick={() => handleValue(modeCanvas[modeCanvas.BRUSH])}
+          onClick={() => handleValue('BRUSH')}
         >
           <FaPencil
             color={
-              modeTypeCanvas === modeCanvas[modeCanvas.BRUSH]
+              modeTypeCanvas === 'BRUSH'
                 ? colorIcon.active
                 : colorIcon.nonActive
             }
@@ -56,11 +54,11 @@ export default function MainMenu({
         <button
           className={classIcon.active}
           type="button"
-          onClick={() => handleValue(modeCanvas[modeCanvas.ERASER])}
+          onClick={() => handleValue('ERASER')}
         >
           <FaEraser
             color={
-              modeTypeCanvas === modeCanvas[modeCanvas.ERASER]
+              modeTypeCanvas === 'ERASER'
                 ? colorIcon.active
                 : colorIcon.nonActive
             }
@@ -81,12 +79,12 @@ export default function MainMenu({
             className={classIcon.active}
             type="button"
             onClick={() => {
-              handleValue(modeCanvas[modeCanvas.SHAPES]);
+              handleValue('SHAPES');
             }}
           >
             <FaShapes color={colorIcon.nonActive} size={sizeIcon.size} />
           </button>
-          {modeTypeCanvas === modeCanvas[modeCanvas.SHAPES] && (
+          {modeTypeCanvas === 'SHAPES' && (
             <ShapeMenu handleShapeSelect={handleValue} />
           )}
         </div>
