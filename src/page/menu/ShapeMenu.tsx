@@ -33,7 +33,7 @@ export default function ShapeMenu({ handleShapeSelect }: ShapeMenuProps) {
         className={classIcon.active}
         type="button"
         onClick={() => {
-          handleShapeSelect('RECT');
+          handleShapeSelect('CIRCLE');
         }}
       >
         <MdOutlineCircle color={colorIcon.nonActive} size={sizeIcon.size} />

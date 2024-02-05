@@ -1,4 +1,3 @@
-import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 
 export const zoomInOut = (event: KonvaEventObject<WheelEvent>) => {

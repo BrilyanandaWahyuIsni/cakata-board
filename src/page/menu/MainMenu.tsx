@@ -66,8 +66,21 @@ export default function MainMenu({
           />
         </button>
         {/* Seleksi */}
-        <button className={classIcon.active} type="button" onClick={() => {}}>
-          <GiArrowCursor color={colorIcon.nonActive} size={sizeIcon.size} />
+        <button
+          className={classIcon.active}
+          type="button"
+          onClick={() => {
+            handleValue('SELECT');
+          }}
+        >
+          <GiArrowCursor
+            color={
+              modeTypeCanvas === 'SELECT'
+                ? colorIcon.active
+                : colorIcon.nonActive
+            }
+            size={sizeIcon.size}
+          />
         </button>
         {/* Add image */}
         <button className={classIcon.active} type="button" onClick={() => {}}>

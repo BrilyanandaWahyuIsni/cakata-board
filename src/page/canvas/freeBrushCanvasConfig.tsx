@@ -26,6 +26,7 @@ export type DataCircleProps = {
   stroke: string;
   strokeWidth: number;
   fill: string;
+  rotation: number;
 };
 
 export type LineProps = {

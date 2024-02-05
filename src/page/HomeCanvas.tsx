@@ -24,18 +24,38 @@ export default function HomeCanvas() {
   };
 
   const changeCanvasWithWindows = (e: KeyboardEvent) => {
-    if (e.code === 'Digit1') setColorBrush('black');
-    if (e.code === 'Digit2') setColorBrush('red');
-    if (e.code === 'Digit3') setColorBrush('green');
-    if (e.code === 'Digit4') setColorBrush('blue');
-    if (e.code === 'Digit5') setColorBrush('yellow');
+    if (e.code === 'Digit1') {
+      setColorBrush('black');
+    }
+    if (e.code === 'Digit2') {
+      setColorBrush('red');
+    }
+    if (e.code === 'Digit3') {
+      setColorBrush('green');
+    }
+    if (e.code === 'Digit4') {
+      setColorBrush('blue');
+    }
+    if (e.code === 'Digit5') {
+      setColorBrush('yellow');
+    }
 
-    if (e.code === 'BracketLeft') setSizeBrush(prev => prev - defaultBrushAdd);
-    if (e.code === 'BracketRight') setSizeBrush(prev => prev + defaultBrushAdd);
+    if (e.code === 'BracketLeft') {
+      setSizeBrush(prev => prev - defaultBrushAdd);
+    }
+    if (e.code === 'BracketRight') {
+      setSizeBrush(prev => prev + defaultBrushAdd);
+    }
 
-    if (e.code === 'KeyP') setModeTypeCanvas('PAN');
-    if (e.code === 'KeyB') setModeTypeCanvas('BRUSH');
-    if (e.code === 'KeyE') setModeTypeCanvas('ERASER');
+    if (e.code === 'KeyP') {
+      setModeTypeCanvas('PAN');
+    }
+    if (e.code === 'KeyB') {
+      setModeTypeCanvas('BRUSH');
+    }
+    if (e.code === 'KeyE') {
+      setModeTypeCanvas('ERASER');
+    }
   };
 
   useEffect(() => {

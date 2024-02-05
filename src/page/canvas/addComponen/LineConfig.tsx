@@ -12,7 +12,7 @@ export function LineMouseDown(
   sizeBrush: number,
 ) {
   const stage = eventStage.target.getStage();
-  if (stage)
+  if (stage) {
     if (eventLine.current) {
       // const transform = eventStage.target.getAbsoluteTransform().copy();
       const transform = eventLine.current.getAbsoluteTransform().copy();
@@ -22,7 +22,9 @@ export function LineMouseDown(
       if (posPointer) {
         const pos = transform.point(posPointer);
         let typeBrush: GlobalCompositeOperation = 'source-over';
-        if (brushType === 'ERASER') typeBrush = 'destination-out';
+        if (brushType === 'ERASER') {
+          typeBrush = 'destination-out';
+        }
 
         return {
           points: [pos.x, pos.y],
@@ -33,6 +35,7 @@ export function LineMouseDown(
         };
       }
     }
+  }
 }
 
 export function LineMouseMove(
@@ -40,7 +43,7 @@ export function LineMouseMove(
   eventLine: React.RefObject<Konva.Line>,
 ) {
   const stage = eventStage.target.getStage();
-  if (stage)
+  if (stage) {
     if (eventLine.current) {
       // const transform = eventStage.target.getAbsoluteTransform().copy();
       const transform = eventLine.current.getAbsoluteTransform().copy();
@@ -52,4 +55,5 @@ export function LineMouseMove(
         return [pos.x, pos.y];
       }
     }
+  }
 }

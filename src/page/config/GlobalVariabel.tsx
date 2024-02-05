@@ -6,7 +6,8 @@ export type modeCanvas =
   | 'RECT'
   | 'TRIAGLE'
   | 'CIRCLE'
-  | 'STAR';
+  | 'STAR'
+  | 'SELECT';
 
 export const defaultBrushAdd = 0.6;
 

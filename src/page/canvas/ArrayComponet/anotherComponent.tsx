@@ -7,26 +7,30 @@ import {
 
 export default function AnotherComponent({
   componenCanvas,
+  draggable,
 }: {
   componenCanvas: Array<ComponenCanvasProps> | [];
+  draggable: boolean;
 }) {
   return (
     <>
       {componenCanvas.map(cmp => {
-        if (cmp.type === 'CIRCLE')
+        if (cmp.type === 'CIRCLE') {
           return (
             <Circle
               id={cmp.data.id}
+              key={cmp.data.id}
               radius={(cmp.data as DataCircleProps).radius}
+              rotation={(cmp.data as DataCircleProps).rotation}
               x={cmp.data.x}
               y={cmp.data.y}
               fill={cmp.data.fill}
               stroke={cmp.data.stroke}
               strokeWidth={cmp.data.strokeWidth}
-              draggable
+              draggable={draggable}
             />
           );
-        else if (cmp.type === 'RECT')
+        } else if (cmp.type === 'RECT') {
           return (
             <Rect
               key={cmp.data.id}
@@ -38,9 +42,10 @@ export default function AnotherComponent({
               fill={cmp.data.fill}
               stroke={cmp.data.stroke}
               strokeWidth={cmp.data.strokeWidth}
-              draggable={false}
+              draggable={draggable}
             />
           );
+        }
       })}
     </>
   );
