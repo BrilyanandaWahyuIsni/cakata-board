@@ -16,6 +16,7 @@ import { zoomInOut } from './addComponen/UniversalConfig';
 import { AddCircle } from './addComponen/CircleConfig';
 import { AddRect } from './addComponen/RectConfig';
 import { AddShapeTriagle } from './addComponen/ShapeConfig';
+import { AddStar } from './addComponen/StarConfig';
 
 function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const [componenCanvas, setComponeCanvas] = useState<
@@ -123,6 +124,9 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
             stageRef={stageRef}
             sendDataShape={handleDataComponent}
           />
+        )}
+        {props.drag === 'STAR' && (
+          <AddStar stageRef={stageRef} sendDataStar={handleDataComponent} />
         )}
       </Layer>
       <Layer>

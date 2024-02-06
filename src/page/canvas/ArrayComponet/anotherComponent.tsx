@@ -1,9 +1,10 @@
-import { Circle, Rect, Shape } from 'react-konva';
+import { Circle, Rect, Shape, Star } from 'react-konva';
 import {
   ComponenCanvasProps,
   DataCircleProps,
   DataRectProps,
   DataShapeProps,
+  DataStarProps,
 } from '../freeBrushCanvasConfig';
 
 export default function AnotherComponent({
@@ -49,6 +50,8 @@ export default function AnotherComponent({
         } else if (cmp.type === 'TRIAGLE') {
           return (
             <Shape
+              id={cmp.data.id}
+              key={cmp.data.id}
               sceneFunc={(context, shape) => {
                 context.beginPath();
                 context.moveTo(
@@ -73,6 +76,26 @@ export default function AnotherComponent({
               fill={cmp.data.fill}
               stroke={cmp.data.stroke}
               strokeWidth={4}
+            />
+          );
+        } else if (cmp.type === 'STAR') {
+          return (
+            <Star
+              id={cmp.data?.id}
+              key={cmp.data?.id}
+              numPoints={cmp.data ? (cmp.data as DataStarProps).numPoints : 0}
+              x={cmp.data?.x}
+              y={cmp.data?.y}
+              rotation={(cmp.data as DataStarProps).rotation}
+              innerRadius={
+                cmp.data ? (cmp.data as DataStarProps).innerRadius : 0
+              }
+              outerRadius={
+                cmp.data ? (cmp.data as DataStarProps).outerRadius : 0
+              }
+              fill={cmp.data?.fill}
+              stroke={cmp.data?.stroke}
+              strokeWidth={cmp.data?.strokeWidth}
             />
           );
         }

@@ -43,6 +43,19 @@ export type DataShapeProps = {
   customPoint: Array<number> | [];
 };
 
+export type DataStarProps = {
+  id: string;
+  numPoints: number;
+  x: number;
+  y: number;
+  innerRadius: number;
+  outerRadius: number;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+  rotation: number;
+};
+
 export type LineProps = {
   id: string;
   points: Array<number>;
@@ -54,7 +67,8 @@ export type LineProps = {
 export type DataComponentProps =
   | DataRectProps
   | DataCircleProps
-  | DataShapeProps;
+  | DataShapeProps
+  | DataStarProps;
 
 export type ComponenCanvasProps = {
   type: TypeComponenCanvasProps;
