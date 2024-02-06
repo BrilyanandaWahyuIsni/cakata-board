@@ -1,11 +1,15 @@
 import { modeCanvas } from '../config/GlobalVariabel';
 
 export type TypeComponenCanvasProps =
+  | 'BRUSH'
+  | 'PAN'
+  | 'ERASER'
+  | 'SHAPES'
   | 'RECT'
+  | 'TRIAGLE'
   | 'CIRCLE'
   | 'STAR'
-  | 'TRIAGLE'
-  | 'NO-ACTION';
+  | 'SELECT';
 
 export type DataRectProps = {
   id: string;
@@ -29,6 +33,16 @@ export type DataCircleProps = {
   rotation: number;
 };
 
+export type DataShapeProps = {
+  id: string;
+  x: number;
+  y: number;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+  customPoint: Array<number> | [];
+};
+
 export type LineProps = {
   id: string;
   points: Array<number>;
@@ -37,7 +51,10 @@ export type LineProps = {
   modeCanvas: GlobalCompositeOperation;
 };
 
-export type DataComponentProps = DataRectProps | DataCircleProps;
+export type DataComponentProps =
+  | DataRectProps
+  | DataCircleProps
+  | DataShapeProps;
 
 export type ComponenCanvasProps = {
   type: TypeComponenCanvasProps;

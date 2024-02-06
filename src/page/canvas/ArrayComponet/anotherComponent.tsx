@@ -1,8 +1,9 @@
-import { Circle, Rect } from 'react-konva';
+import { Circle, Rect, Shape } from 'react-konva';
 import {
   ComponenCanvasProps,
   DataCircleProps,
   DataRectProps,
+  DataShapeProps,
 } from '../freeBrushCanvasConfig';
 
 export default function AnotherComponent({
@@ -43,6 +44,35 @@ export default function AnotherComponent({
               stroke={cmp.data.stroke}
               strokeWidth={cmp.data.strokeWidth}
               draggable={draggable}
+            />
+          );
+        } else if (cmp.type === 'TRIAGLE') {
+          return (
+            <Shape
+              sceneFunc={(context, shape) => {
+                context.beginPath();
+                context.moveTo(
+                  (cmp.data as DataShapeProps).customPoint[0],
+                  (cmp.data as DataShapeProps).customPoint[1],
+                );
+                for (
+                  let i = 2;
+                  i < (cmp.data as DataShapeProps).customPoint.length;
+                  i += 2
+                ) {
+                  context.lineTo(
+                    (cmp.data as DataShapeProps).customPoint[i],
+                    (cmp.data as DataShapeProps).customPoint[i + 1],
+                  );
+                }
+                context.closePath();
+                context.fillStrokeShape(shape);
+              }}
+              x={cmp.data.x}
+              y={cmp.data.y}
+              fill={cmp.data.fill}
+              stroke={cmp.data.stroke}
+              strokeWidth={4}
             />
           );
         }

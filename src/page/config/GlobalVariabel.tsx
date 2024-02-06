@@ -1,13 +1,6 @@
-export type modeCanvas =
-  | 'BRUSH'
-  | 'PAN'
-  | 'ERASER'
-  | 'SHAPES'
-  | 'RECT'
-  | 'TRIAGLE'
-  | 'CIRCLE'
-  | 'STAR'
-  | 'SELECT';
+import { TypeComponenCanvasProps } from '../canvas/freeBrushCanvasConfig';
+
+export type modeCanvas = TypeComponenCanvasProps;
 
 export const defaultBrushAdd = 0.6;
 
