@@ -119,7 +119,7 @@ export function AddRect({ stageRef, sendDataRect }: RectConfigProps) {
       y={addRect?.y}
       fill={'white'}
       stroke={'black'}
-      strokeWidth={5}
+      strokeWidth={1}
       ref={rectRef}
     />
   );

@@ -1,19 +1,35 @@
-import { Circle, Rect, Shape, Star } from 'react-konva';
+import { Circle, Image, Shape, Star, Text } from 'react-konva';
 import {
   ComponenCanvasProps,
   DataCircleProps,
-  DataRectProps,
+  DataImageProps,
   DataShapeProps,
   DataStarProps,
+  DataTextProps,
 } from '../freeBrushCanvasConfig';
+import RectTransform, {
+  SendNewPosProps,
+} from './anotherComponet/RectTransform';
+import { useState } from 'react';
 
 export default function AnotherComponent({
   componenCanvas,
   draggable,
+  sendDataPos,
 }: {
   componenCanvas: Array<ComponenCanvasProps> | [];
   draggable: boolean;
+  sendDataPos: ({ pos, index }: SendNewPosProps) => void;
 }) {
+  const [selectedCmp, setSelectedCmp] = useState<string | null>(null);
+  const handleClickComponent = (id: string) => {
+    setSelectedCmp(id);
+  };
+
+  const handleSendNewPos = ({ pos, index }: SendNewPosProps) => {
+    sendDataPos({ pos, index });
+  };
+
   return (
     <>
       {componenCanvas.map(cmp => {
@@ -34,17 +50,12 @@ export default function AnotherComponent({
           );
         } else if (cmp.type === 'RECT') {
           return (
-            <Rect
-              key={cmp.data.id}
-              id={cmp.data.id}
-              width={(cmp.data as DataRectProps).width}
-              height={(cmp.data as DataRectProps).height}
-              x={cmp.data.x}
-              y={cmp.data.y}
-              fill={cmp.data.fill}
-              stroke={cmp.data.stroke}
-              strokeWidth={cmp.data.strokeWidth}
+            <RectTransform
+              cmp={cmp}
               draggable={draggable}
+              handleClick={() => handleClickComponent(cmp.data.id)}
+              isSelected={draggable && cmp.data.id === selectedCmp}
+              sendNewPos={handleSendNewPos}
             />
           );
         } else if (cmp.type === 'TRIAGLE') {
@@ -76,6 +87,7 @@ export default function AnotherComponent({
               fill={cmp.data.fill}
               stroke={cmp.data.stroke}
               strokeWidth={4}
+              draggable={draggable}
             />
           );
         } else if (cmp.type === 'STAR') {
@@ -96,6 +108,32 @@ export default function AnotherComponent({
               fill={cmp.data?.fill}
               stroke={cmp.data?.stroke}
               strokeWidth={cmp.data?.strokeWidth}
+              draggable={draggable}
+            />
+          );
+        } else if (cmp.type === 'TEXT') {
+          return (
+            <Text
+              id={cmp.data.id}
+              key={cmp.data.id}
+              text={(cmp.data as DataTextProps).text}
+              x={cmp.data.x}
+              y={
+                cmp ? cmp.data.y - (cmp.data as DataTextProps).fontSize + 2 : 0
+              }
+              fontSize={(cmp.data as DataTextProps).fontSize}
+              fontFamily={(cmp.data as DataTextProps).fontFamily}
+              fill={cmp.data.fill}
+              draggable={draggable}
+            />
+          );
+        } else if (cmp.type === 'IMAGE') {
+          return (
+            <Image
+              key={cmp.data.id}
+              id={cmp.data.id}
+              image={(cmp.data as DataImageProps).image}
+              draggable={draggable}
             />
           );
         }

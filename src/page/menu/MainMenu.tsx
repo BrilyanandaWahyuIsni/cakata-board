@@ -83,8 +83,21 @@ export default function MainMenu({
           />
         </button>
         {/* Add image */}
-        <button className={classIcon.active} type="button" onClick={() => {}}>
-          <FaImage color={colorIcon.nonActive} size={sizeIcon.size} />
+        <button
+          className={classIcon.active}
+          type="button"
+          onClick={() => {
+            handleValue('IMAGE');
+          }}
+        >
+          <FaImage
+            color={
+              modeTypeCanvas === 'IMAGE'
+                ? colorIcon.active
+                : colorIcon.nonActive
+            }
+            size={sizeIcon.size}
+          />
         </button>
         {/* shapes */}
         <div className="relative">
@@ -102,8 +115,19 @@ export default function MainMenu({
           )}
         </div>
         {/* add text */}
-        <button className={classIcon.active} type="button" onClick={() => {}}>
-          <BsTextareaT color={colorIcon.nonActive} size={sizeIcon.size} />
+        <button
+          className={classIcon.active}
+          type="button"
+          onClick={() => {
+            handleValue('TEXT');
+          }}
+        >
+          <BsTextareaT
+            color={
+              modeTypeCanvas === 'TEXT' ? colorIcon.active : colorIcon.nonActive
+            }
+            size={sizeIcon.size}
+          />
         </button>
       </div>
     </>

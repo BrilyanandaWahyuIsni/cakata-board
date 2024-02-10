@@ -4,6 +4,7 @@ import MainMenu from './menu/MainMenu';
 import { defaultBrushAdd, modeCanvas } from './config/GlobalVariabel';
 import { modePointerWindows } from './config/AppConfig';
 import MainColor from './menu/MainColor';
+import MenuCustom from './menu/MenuCustom';
 
 export default function HomeCanvas() {
   const [modeTypeCanvas, setModeTypeCanvas] = useState<modeCanvas>('BRUSH');
@@ -22,49 +23,49 @@ export default function HomeCanvas() {
   const handleChangeColor = (e: string) => {
     setColorBrush(e);
   };
-
-  const changeCanvasWithWindows = (e: KeyboardEvent) => {
-    if (e.code === 'Digit1') {
-      setColorBrush('black');
-    }
-    if (e.code === 'Digit2') {
-      setColorBrush('red');
-    }
-    if (e.code === 'Digit3') {
-      setColorBrush('green');
-    }
-    if (e.code === 'Digit4') {
-      setColorBrush('blue');
-    }
-    if (e.code === 'Digit5') {
-      setColorBrush('yellow');
-    }
-
-    if (e.code === 'BracketLeft') {
-      setSizeBrush(prev => prev - defaultBrushAdd);
-    }
-    if (e.code === 'BracketRight') {
-      setSizeBrush(prev => prev + defaultBrushAdd);
-    }
-
-    if (e.code === 'KeyP') {
-      setModeTypeCanvas('PAN');
-    }
-    if (e.code === 'KeyB') {
-      setModeTypeCanvas('BRUSH');
-    }
-    if (e.code === 'KeyE') {
-      setModeTypeCanvas('ERASER');
-    }
-  };
-
   useEffect(() => {
+    const changeCanvasWithWindows = (e: KeyboardEvent) => {
+      if (modeTypeCanvas !== 'TEXT') {
+        if (e.code === 'Digit1') {
+          setColorBrush('black');
+        }
+        if (e.code === 'Digit2') {
+          setColorBrush('red');
+        }
+        if (e.code === 'Digit3') {
+          setColorBrush('green');
+        }
+        if (e.code === 'Digit4') {
+          setColorBrush('blue');
+        }
+        if (e.code === 'Digit5') {
+          setColorBrush('yellow');
+        }
+
+        if (e.code === 'BracketLeft') {
+          setSizeBrush(prev => prev - defaultBrushAdd);
+        }
+        if (e.code === 'BracketRight') {
+          setSizeBrush(prev => prev + defaultBrushAdd);
+        }
+
+        if (e.code === 'KeyP') {
+          setModeTypeCanvas('PAN');
+        }
+        if (e.code === 'KeyB') {
+          setModeTypeCanvas('BRUSH');
+        }
+        if (e.code === 'KeyE') {
+          setModeTypeCanvas('ERASER');
+        }
+      }
+    };
     window.addEventListener('keydown', changeCanvasWithWindows);
 
     return () => {
       window.removeEventListener('keydown', changeCanvasWithWindows);
     };
-  }, []);
+  }, [modeTypeCanvas]);
 
   return (
     <div
@@ -81,6 +82,7 @@ export default function HomeCanvas() {
       {modeTypeCanvas === 'BRUSH' && (
         <MainColor handleSendColor={handleChangeColor} />
       )}
+      <MenuCustom />
       <FreeBrushCanvas
         drag={modeTypeCanvas}
         sizeBrush={sizeBrush}

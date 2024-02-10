@@ -99,7 +99,7 @@ export function AddStar({ stageRef, sendDataStar }: AddStar) {
         stageRef.current.off('mouseup', handleMouseUp);
       }
     };
-  }, [addStar, firstPoint, stageRef]);
+  }, [addStar, firstPoint, sendDataStar, stageRef]);
 
   return (
     <Star

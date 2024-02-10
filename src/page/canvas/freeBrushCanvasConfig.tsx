@@ -1,3 +1,4 @@
+import { Vector2d } from 'konva/lib/types';
 import { modeCanvas } from '../config/GlobalVariabel';
 
 export type TypeComponenCanvasProps =
@@ -9,7 +10,9 @@ export type TypeComponenCanvasProps =
   | 'TRIAGLE'
   | 'CIRCLE'
   | 'STAR'
-  | 'SELECT';
+  | 'SELECT'
+  | 'TEXT'
+  | 'IMAGE';
 
 export type DataRectProps = {
   id: string;
@@ -64,11 +67,35 @@ export type LineProps = {
   modeCanvas: GlobalCompositeOperation;
 };
 
+export type DataTextProps = {
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  fill: string;
+  fontSize: number;
+  fontFamily: string;
+  stroke: string;
+  strokeWidth: number;
+};
+
+export type DataImageProps = {
+  id: string;
+  image: CanvasImageSource;
+  x: number;
+  y: number;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+};
+
 export type DataComponentProps =
   | DataRectProps
   | DataCircleProps
   | DataShapeProps
-  | DataStarProps;
+  | DataStarProps
+  | DataTextProps
+  | DataImageProps;
 
 export type ComponenCanvasProps = {
   type: TypeComponenCanvasProps;
