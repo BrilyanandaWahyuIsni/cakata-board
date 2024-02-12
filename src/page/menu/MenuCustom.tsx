@@ -1,29 +1,50 @@
 import { ChangeEvent, useState } from 'react';
 import { ColorResult, SketchPicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { useDispatch } from 'react-redux';
+import { rubahDataKomponen } from '../store/show-clickComponent';
+import { DataComponentProps } from '../canvas/freeBrushCanvasConfig';
 
-type ModeMenuProps = 'FILL' | 'STROKE' | 'STROKE WIDTH' | 'POS' | 'SKALA';
-type ChangeDataProps = {
+export type ModeMenuProps =
+  | 'FILL'
+  | 'STROKE'
+  | 'STROKE WIDTH'
+  | 'POS'
+  | 'SKALA';
+
+export type ChangeDataProps = {
+  id: string;
   fill: string;
   stroke: string;
   strokeWidth: number;
   posX: number;
   posY: number;
-  scaleX: number;
-  scaleY: number;
+  // scaleX: number;
+  // scaleY: number;
 };
 
-export default function MenuCustom() {
-  const [modeMenu, setModeMenu] = useState<ModeMenuProps | null>(null);
-  const [changeData, setChangeData] = useState<ChangeDataProps>({
-    fill: 'red',
-    stroke: 'red',
-    strokeWidth: 4,
-    posX: 1,
-    posY: 1,
-    scaleX: 1,
-    scaleY: 1,
+type MenuCustomProps = {
+  handleRalatData: (value: ChangeDataProps) => void;
+  componentData: DataComponentProps;
+};
+
+export default function MenuCustom({
+  handleRalatData,
+  componentData,
+}: MenuCustomProps) {
+  const dispacth = useDispatch();
+  const [ralatData, setRalatData] = useState<ChangeDataProps>({
+    id: componentData.id,
+    fill: componentData.fill,
+    stroke: componentData.stroke,
+    strokeWidth: componentData.strokeWidth,
+    posX: componentData.x,
+    posY: componentData.y,
   });
+
+  const [modeMenu, setModeMenu] = useState<ModeMenuProps | null>(
+    'STROKE WIDTH',
+  );
 
   const handleModeMenu = (value: ModeMenuProps) => {
     if (modeMenu === value) {
@@ -35,21 +56,21 @@ export default function MenuCustom() {
 
   const handleChangeValueData = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setChangeData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
+    setRalatData(prev => ({ ...prev, [name]: value }));
+    handleRalatData(ralatData);
   };
 
   const handleChangeColor = (e: ColorResult, name: string) => {
-    setChangeData(prev => ({
-      ...prev,
-      [name]: e.hex,
-    }));
+    setRalatData(prev => ({ ...prev, [name]: e.hex }));
+    handleRalatData(ralatData);
+  };
+
+  const rubahData = () => {
+    dispacth(rubahDataKomponen({ change: false }));
   };
 
   return (
-    <div className="h-[calc(100vh-4rem)] w-64 absolute bg-slate-700 rounded-3xl p-3 z-20 right-3 top-8 overflow-hidden">
+    <div className="w-72 absolute bg-slate-700 rounded-3xl p-3 z-20 right-3 top-8 overflow-hidden">
       <div className="w-full h-[calc(100vh-4rem)] flex flex-col gap-3 items-center overflow-y-scroll overflow-x-hidden pb-10 scrollbar-none text-white">
         {/* menu fill section  */}
         <div className="w-full flex flex-col items-center">
@@ -68,9 +89,11 @@ export default function MenuCustom() {
           </button>
           {modeMenu === 'FILL' && (
             <SketchPicker
-              width="11rem"
-              color={changeData.fill}
+              width="15rem"
+              color={componentData.fill}
               onChange={e => handleChangeColor(e, 'fill')}
+              // onChangeComplete={e => handleChangeColor(e, 'fill')}
+              className="text-black"
             />
           )}
         </div>
@@ -89,9 +112,11 @@ export default function MenuCustom() {
           </button>
           {modeMenu === 'STROKE' && (
             <SketchPicker
-              width="11rem"
-              color={changeData.stroke}
+              width="15rem"
+              color={componentData.stroke}
               onChange={e => handleChangeColor(e, 'stroke')}
+              // onChangeComplete={e => handleChangeColor(e, 'stroke')}
+              className="text-black"
             />
           )}
         </div>
@@ -114,19 +139,21 @@ export default function MenuCustom() {
                 type="range"
                 min={0}
                 max={100}
-                value={changeData.strokeWidth}
+                value={componentData.strokeWidth}
                 className="w-full text-black"
                 name="strokeWidth"
+                onBlur={rubahData}
                 onChange={handleChangeValueData}
               />
               <input
                 type="number"
-                className="w-12 text-black p-1 rounded-xl"
-                value={changeData.strokeWidth}
+                className="w-20 text-black p-1 rounded-xl text-right"
+                value={componentData.strokeWidth}
                 name="strokeWidth"
                 min={0}
                 max={100}
                 onChange={handleChangeValueData}
+                onBlur={rubahData}
               />
             </div>
           )}
@@ -145,32 +172,33 @@ export default function MenuCustom() {
             Pos
           </button>
           {modeMenu === 'POS' && (
-            <div className="w-full flex justify-center">
-              <div className="w-1/2 flex justify-center gap-2">
+            <div className="w-full flex justify-center items-center">
+              <div className="w-1/2 flex justify-center items-center gap-2">
                 <>x :</>
                 <input
                   type="number"
-                  className="w-10 text-black p-2 rounded-xl"
-                  value={changeData.posX}
+                  className="w-20 text-black p-2 rounded-xl"
+                  value={componentData.x}
                   name="posX"
                   onChange={handleChangeValueData}
                 />
               </div>
-              <div className="w-1/2 flex justify-center gap-2">
+              <div className="w-1/2 flex justify-center items-center gap-2">
                 <>y :</>
                 <input
                   type="number"
-                  className="w-10 text-black p-2 rounded-xl"
-                  value={changeData.posY}
+                  className="w-20 text-black p-2 rounded-xl"
+                  value={componentData.y}
                   name="posY"
                   onChange={handleChangeValueData}
+                  onBlur={rubahData}
                 />
               </div>
             </div>
           )}
         </div>
         {/* menu skala section */}
-        <div className="w-full flex flex-col items-center">
+        {/* <div className="w-full flex flex-col items-center">
           <button
             onClick={() => handleModeMenu('SKALA')}
             className="py-1 mb-2  px-10 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
@@ -184,29 +212,30 @@ export default function MenuCustom() {
           </button>
           {modeMenu === 'SKALA' && (
             <div className="w-full flex justify-center">
-              <div className="w-1/2 flex justify-center gap-2">
+              <div className="w-1/2 flex justify-center items-center gap-2">
                 <>x :</>
                 <input
                   type="number"
-                  className="w-10 text-black p-2 rounded-xl"
-                  value={changeData.scaleX}
+                  className="w-20 text-black p-2 text-right rounded-xl"
+                  value={componentData.scaleX}
                   name="scaleX"
                   onChange={handleChangeValueData}
+                  onBlur={rubahData}
                 />
               </div>
-              <div className="w-1/2 flex justify-center gap-2">
+              <div className="w-1/2 flex justify-center items-center gap-2">
                 <>y :</>
                 <input
                   type="number"
-                  className="w-10 text-black p-2 rounded-xl"
-                  value={changeData.scaleY}
+                  className="w-20 text-black p-2 text-right rounded-xl"
+                  value={componentData.scaleY}
                   name="scaleY"
                   onChange={handleChangeValueData}
                 />
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

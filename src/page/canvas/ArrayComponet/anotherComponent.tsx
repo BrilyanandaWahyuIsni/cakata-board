@@ -2,36 +2,32 @@ import { Circle, Image, Shape, Star, Text } from 'react-konva';
 import {
   ComponenCanvasProps,
   DataCircleProps,
+  DataComponentProps,
   DataImageProps,
   DataShapeProps,
   DataStarProps,
   DataTextProps,
 } from '../freeBrushCanvasConfig';
-import RectTransform, {
-  SendNewPosProps,
-} from './anotherComponet/RectTransform';
-import { useState } from 'react';
+import RectTransform from './anotherComponet/RectTransform';
+import { Fragment } from 'react';
 
 export default function AnotherComponent({
   componenCanvas,
   draggable,
-  sendDataPos,
+  selectedCmp,
+  sendIdSelectedCmp,
 }: {
   componenCanvas: Array<ComponenCanvasProps> | [];
   draggable: boolean;
-  sendDataPos: ({ pos, index }: SendNewPosProps) => void;
+  selectedCmp: string | null | undefined;
+  sendIdSelectedCmp: (value: DataComponentProps) => void;
 }) {
-  const [selectedCmp, setSelectedCmp] = useState<string | null>(null);
-  const handleClickComponent = (id: string) => {
-    setSelectedCmp(id);
-  };
-
-  const handleSendNewPos = ({ pos, index }: SendNewPosProps) => {
-    sendDataPos({ pos, index });
+  const handleClickComponent = (value: DataComponentProps) => {
+    sendIdSelectedCmp(value);
   };
 
   return (
-    <>
+    <Fragment>
       {componenCanvas.map(cmp => {
         if (cmp.type === 'CIRCLE') {
           return (
@@ -53,9 +49,8 @@ export default function AnotherComponent({
             <RectTransform
               cmp={cmp}
               draggable={draggable}
-              handleClick={() => handleClickComponent(cmp.data.id)}
+              handleClick={() => handleClickComponent(cmp.data)}
               isSelected={draggable && cmp.data.id === selectedCmp}
-              sendNewPos={handleSendNewPos}
             />
           );
         } else if (cmp.type === 'TRIAGLE') {
@@ -138,6 +133,6 @@ export default function AnotherComponent({
           );
         }
       })}
-    </>
+    </Fragment>
   );
 }

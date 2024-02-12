@@ -4,6 +4,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import Konva from 'konva';
 import {
   ComponenCanvasProps,
+  DataComponentProps,
   FreeBrushCanvasProps,
   LineProps,
 } from './freeBrushCanvasConfig';
@@ -18,9 +19,21 @@ import { AddShapeTriagle } from './addComponen/ShapeConfig';
 import { AddStar } from './addComponen/StarConfig';
 import { AddText } from './addComponen/TextConfig';
 import { AddImage } from './addComponen/ImageConfig';
-import { SendNewPosProps } from './ArrayComponet/anotherComponet/RectTransform';
+// import { SendNewPosProps } from './ArrayComponet/anotherComponet/RectTransform';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShowCmp } from '../store/show-clickComponent';
+import { StoreStateProps } from '../store';
+import MenuCustom, { ChangeDataProps } from '../menu/MenuCustom';
 
 function FreeBrushCanvas(props: FreeBrushCanvasProps) {
+  const dispactch = useDispatch();
+  const modeTypeCanvas = useSelector(
+    (state: StoreStateProps) => state.modeCanvas.value,
+  );
+  const getData = useSelector(
+    (state: StoreStateProps) => state.showDataComponent,
+  );
+
   const [componenCanvas, setComponeCanvas] = useState<
     Array<ComponenCanvasProps> | []
   >([]);
@@ -38,23 +51,36 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputImage, setInputImage] = useState<HTMLImageElement | null>(null);
 
+  const [selectedCmp, setSelectedCmp] = useState<DataComponentProps | null>(
+    null,
+  );
+
+  const handleChangeIdSelected = (value: DataComponentProps) => {
+    setSelectedCmp(value);
+  };
+
   const handleMouseDown = (event: KonvaEventObject<MouseEvent>) => {
     setLastId(uuid4());
 
-    if (props.drag === 'BRUSH' || props.drag === 'ERASER') {
+    if (modeTypeCanvas === 'BRUSH' || modeTypeCanvas === 'ERASER') {
       isDrawing.current = true;
-      const { drag, colorBrush, sizeBrush } = props;
-      const addPointLine = LineMouseDown(
-        lastId,
-        event,
-        lineRef,
-        drag,
+      const { colorBrush, sizeBrush } = props;
+      const addPointLine = LineMouseDown({
+        id: lastId,
+        brushType: modeTypeCanvas,
         colorBrush,
+        eventLine: lineRef,
+        eventStage: event,
         sizeBrush,
-      );
+      });
       if (addPointLine) {
         setAddLine(addPointLine);
       }
+    }
+
+    const clickedIsEmpty = event.target === event.target.getStage();
+    if (clickedIsEmpty) {
+      setSelectedCmp(null);
     }
   };
 
@@ -63,7 +89,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
       return;
     }
 
-    if (props.drag === 'BRUSH' || props.drag === 'ERASER') {
+    if (modeTypeCanvas === 'BRUSH' || modeTypeCanvas === 'ERASER') {
       const addLinePoint = LineMouseMove(event, lineRef);
       if (addLinePoint) {
         if (addLine) {
@@ -93,7 +119,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
 
   const handleDataComponent = (value: ComponenCanvasProps) => {
     setComponeCanvas(prev => [...prev, value]);
-    if (props.drag === 'IMAGE') {
+    if (modeTypeCanvas === 'IMAGE') {
       setInputImage(null);
     }
   };
@@ -117,32 +143,48 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     }
   };
 
-  const handleDataNewPos = ({ pos, index }: SendNewPosProps) => {
+  const handleRalatData = (value: ChangeDataProps) => {
     if (componenCanvas) {
-      const copyComponentCanvas = componenCanvas;
-      copyComponentCanvas.map((cmp, ind) => {
-        if (cmp.data.id === index) {
-          copyComponentCanvas[ind] = {
-            type: cmp.type,
-            data: {
-              ...cmp.data,
-              x: pos.x,
-              y: pos.y,
-            },
-          };
-        }
+      setComponeCanvas(prev => {
+        return prev.map(pre => {
+          if (pre.data.id === value.id) {
+            return {
+              type: pre.type,
+              data: {
+                ...pre.data,
+                x:
+                  typeof value.posX === 'string'
+                    ? parseFloat(value.posX)
+                    : value.posX,
+                y:
+                  typeof value.posY === 'string'
+                    ? parseFloat(value.posY)
+                    : value.posY,
+                fill: value.fill,
+                stroke: value.stroke,
+                strokeWidth:
+                  typeof value.strokeWidth === 'string'
+                    ? parseFloat(value.strokeWidth)
+                    : value.strokeWidth,
+              },
+            };
+          }
+          return pre;
+        });
       });
-      setComponeCanvas(copyComponentCanvas);
     }
   };
 
   useEffect(() => {
-    if (props.drag === 'IMAGE') {
+    if (modeTypeCanvas === 'IMAGE') {
       if (inputRef.current) {
         inputRef.current.click();
       }
     }
-  }, [props.drag]);
+    if (modeTypeCanvas !== 'SELECT') {
+      dispactch(setShowCmp({ value: false }));
+    }
+  }, [dispactch, modeTypeCanvas]);
 
   return (
     <>
@@ -153,6 +195,18 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
         className="hidden"
         ref={inputRef}
       />
+      {getData.value &&
+        selectedCmp &&
+        componenCanvas.map(e => {
+          if (e.data.id === selectedCmp.id) {
+            return (
+              <MenuCustom
+                handleRalatData={handleRalatData}
+                componentData={e.data}
+              />
+            );
+          }
+        })}
 
       <Stage
         width={window.innerWidth}
@@ -161,38 +215,39 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
         onWheel={handleWheel}
-        draggable={props.drag === 'PAN'}
+        draggable={modeTypeCanvas === 'PAN'}
         ref={stageRef}
       >
         <Layer>
           <AnotherComponent
+            sendIdSelectedCmp={handleChangeIdSelected}
+            selectedCmp={selectedCmp?.id}
             componenCanvas={componenCanvas}
-            draggable={props.drag === 'SELECT'}
-            sendDataPos={handleDataNewPos}
+            draggable={modeTypeCanvas === 'SELECT'}
           />
 
-          {props.drag === 'CIRCLE' && (
+          {modeTypeCanvas === 'CIRCLE' && (
             <AddCircle
               stageRef={stageRef}
               sendDataCircle={handleDataComponent}
             />
           )}
-          {props.drag === 'RECT' && (
+          {modeTypeCanvas === 'RECT' && (
             <AddRect stageRef={stageRef} sendDataRect={handleDataComponent} />
           )}
-          {props.drag === 'TRIAGLE' && (
+          {modeTypeCanvas === 'TRIAGLE' && (
             <AddShapeTriagle
               stageRef={stageRef}
               sendDataShape={handleDataComponent}
             />
           )}
-          {props.drag === 'STAR' && (
+          {modeTypeCanvas === 'STAR' && (
             <AddStar stageRef={stageRef} sendDataStar={handleDataComponent} />
           )}
-          {props.drag === 'TEXT' && (
+          {modeTypeCanvas === 'TEXT' && (
             <AddText stageRef={stageRef} sendDataText={handleDataComponent} />
           )}
-          {props.drag === 'IMAGE' && inputImage && (
+          {modeTypeCanvas === 'IMAGE' && inputImage && (
             <AddImage image={inputImage} sendDataImage={handleDataComponent} />
           )}
         </Layer>

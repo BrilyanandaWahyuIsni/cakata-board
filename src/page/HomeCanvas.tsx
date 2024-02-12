@@ -4,16 +4,23 @@ import MainMenu from './menu/MainMenu';
 import { defaultBrushAdd, modeCanvas } from './config/GlobalVariabel';
 import { modePointerWindows } from './config/AppConfig';
 import MainColor from './menu/MainColor';
-import MenuCustom from './menu/MenuCustom';
+import { useDispatch, useSelector } from 'react-redux';
+import { StoreStateProps } from './store';
+import { setModeCanvas } from './store/mode-canvas';
 
 export default function HomeCanvas() {
-  const [modeTypeCanvas, setModeTypeCanvas] = useState<modeCanvas>('BRUSH');
+  const dispatch = useDispatch();
+  const modeTypeCanvas = useSelector(
+    (state: StoreStateProps) => state.modeCanvas.value,
+  );
+
+  // const [modeTypeCanvas, setModeTypeCanvas] = useState<modeCanvas>('BRUSH');
   const [scaleCanvas, setScaleCanvas] = useState<number>(1);
   const [sizeBrush, setSizeBrush] = useState<number>(4);
   const [colorBrush, setColorBrush] = useState<string>('black');
 
   const handleValue = (value: modeCanvas) => {
-    setModeTypeCanvas(value);
+    dispatch(setModeCanvas({ value: value }));
   };
 
   const handleReceiveScale = (e: number) => {
@@ -50,13 +57,13 @@ export default function HomeCanvas() {
         }
 
         if (e.code === 'KeyP') {
-          setModeTypeCanvas('PAN');
+          dispatch(setModeCanvas({ value: 'PAN' }));
         }
         if (e.code === 'KeyB') {
-          setModeTypeCanvas('BRUSH');
+          dispatch(setModeCanvas({ value: 'BRUSH' }));
         }
         if (e.code === 'KeyE') {
-          setModeTypeCanvas('ERASER');
+          dispatch(setModeCanvas({ value: 'ERASER' }));
         }
       }
     };
@@ -65,7 +72,7 @@ export default function HomeCanvas() {
     return () => {
       window.removeEventListener('keydown', changeCanvasWithWindows);
     };
-  }, [modeTypeCanvas]);
+  }, [dispatch, modeTypeCanvas]);
 
   return (
     <div
@@ -82,9 +89,7 @@ export default function HomeCanvas() {
       {modeTypeCanvas === 'BRUSH' && (
         <MainColor handleSendColor={handleChangeColor} />
       )}
-      <MenuCustom />
       <FreeBrushCanvas
-        drag={modeTypeCanvas}
         sizeBrush={sizeBrush}
         colorBrush={colorBrush}
         handleSendScale={handleReceiveScale}

@@ -32,7 +32,7 @@ export function RectConfigMouseDownOrMove({
           x: pos.x,
           y: pos.y,
           stroke: 'black',
-          strokeWidth: 5,
+          strokeWidth: 1,
         };
       }
     }
@@ -111,12 +111,13 @@ export function AddRect({ stageRef, sendDataRect }: RectConfigProps) {
 
   return (
     <Rect
-      key={addRect?.id}
       id={addRect?.id}
       width={addRect?.width}
       height={addRect?.height}
       x={addRect?.x}
       y={addRect?.y}
+      scaleX={1}
+      scaleY={1}
       fill={'white'}
       stroke={'black'}
       strokeWidth={1}

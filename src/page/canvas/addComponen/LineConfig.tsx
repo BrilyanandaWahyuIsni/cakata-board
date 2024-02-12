@@ -3,14 +3,22 @@ import { modeCanvas } from '../../config/GlobalVariabel';
 import Konva from 'konva';
 import React from 'react';
 
-export function LineMouseDown(
-  id: string,
-  eventStage: KonvaEventObject<MouseEvent>,
-  eventLine: React.RefObject<Konva.Line>,
-  brushType: modeCanvas,
-  colorBrush: string,
-  sizeBrush: number,
-) {
+type LineMouseDownProps = {
+  id: string;
+  eventStage: KonvaEventObject<MouseEvent>;
+  eventLine: React.RefObject<Konva.Line>;
+  brushType: modeCanvas;
+  colorBrush: string;
+  sizeBrush: number;
+};
+export function LineMouseDown({
+  id,
+  eventStage,
+  eventLine,
+  brushType,
+  colorBrush,
+  sizeBrush,
+}: LineMouseDownProps) {
   const stage = eventStage.target.getStage();
   if (stage) {
     if (eventLine.current) {

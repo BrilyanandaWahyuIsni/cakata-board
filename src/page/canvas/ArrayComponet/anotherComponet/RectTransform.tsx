@@ -6,43 +6,43 @@ import {
 import { Rect, Transformer } from 'react-konva';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Vector2d } from 'konva/lib/types';
-
-export type SendNewPosProps = {
-  pos: Vector2d;
-  index: string;
-};
+import { useDispatch } from 'react-redux';
+import { setShowCmp } from '../../../store/show-clickComponent';
 
 export type RectTransformProps = {
   cmp: ComponenCanvasProps;
   draggable: boolean;
   isSelected: boolean;
   handleClick: () => void;
-  sendNewPos: ({ pos, index }: SendNewPosProps) => void;
 };
 export default function RectTransform({
   cmp,
   draggable,
   handleClick,
   isSelected,
-  sendNewPos,
 }: RectTransformProps) {
+  const dispactch = useDispatch();
+
   const rectRef = useRef<Konva.Rect>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
 
   const handleDragEnd = (evt: KonvaEventObject<DragEvent>) => {
-    sendNewPos({
-      pos: { x: evt.target.x(), y: evt.target.y() },
-      index: cmp.data.id,
-    });
+    // sendNewPos({
+    //   pos: {
+    //     x: isSelected ? dataReact.posX : cmp.data.x,
+    //     y: isSelected ? dataReact.posY : cmp.data.y,
+    //   },
+    //   index: cmp.data.id,
+    // });
   };
 
   useEffect(() => {
     if (isSelected && rectRef.current) {
       transformerRef.current?.nodes([rectRef.current]);
       transformerRef.current?.getLayer()?.batchDraw();
+      dispactch(setShowCmp({ value: true }));
     }
-  }, [isSelected]);
+  }, [cmp, dispactch, isSelected]);
 
   return (
     <>

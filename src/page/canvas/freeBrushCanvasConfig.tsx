@@ -1,6 +1,3 @@
-import { Vector2d } from 'konva/lib/types';
-import { modeCanvas } from '../config/GlobalVariabel';
-
 export type TypeComponenCanvasProps =
   | 'BRUSH'
   | 'PAN'
@@ -108,7 +105,6 @@ export type AllSaveDataProps = {
 };
 
 export type FreeBrushCanvasProps = {
-  drag: modeCanvas;
   sizeBrush: number;
   colorBrush: string;
   handleSendScale: (value: number) => void;
