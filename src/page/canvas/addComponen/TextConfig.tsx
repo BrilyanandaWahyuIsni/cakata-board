@@ -85,6 +85,8 @@ export function AddText({ stageRef, sendDataText }: AddTextProps) {
           fontSize: 20,
           stroke: '',
           strokeWidth: 0,
+          scaleX: 1,
+          scaleY: 1,
         });
       }
     };
@@ -134,6 +136,8 @@ export function AddText({ stageRef, sendDataText }: AddTextProps) {
         text={addText?.text}
         x={addText?.x}
         y={addText ? addText?.y - addText.fontSize + 2 : 0}
+        scaleX={addText?.scaleX}
+        scaleY={addText?.scaleY}
         fontSize={addText?.fontSize}
         fontFamily={addText?.fontFamily}
         fill={addText?.fill}

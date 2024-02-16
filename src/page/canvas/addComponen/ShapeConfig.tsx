@@ -47,6 +47,8 @@ export function AddShapeTriagle({
           id: uuid4(),
           x: pos?.x,
           y: pos?.y,
+          scaleX: 1,
+          scaleY: 1,
           fill: 'transparent',
           stroke: 'black',
           strokeWidth: 4,
@@ -111,6 +113,8 @@ export function AddShapeTriagle({
       }}
       x={addShape?.x}
       y={addShape?.y}
+      scaleX={addShape?.scaleX}
+      scaleY={addShape?.scaleY}
       fill={addShape?.fill}
       stroke={addShape?.stroke}
       strokeWidth={4}

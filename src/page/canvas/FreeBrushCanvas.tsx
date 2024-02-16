@@ -4,7 +4,6 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import Konva from 'konva';
 import {
   ComponenCanvasProps,
-  DataComponentProps,
   FreeBrushCanvasProps,
   LineProps,
 } from './freeBrushCanvasConfig';
@@ -24,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setShowCmp } from '../store/show-clickComponent';
 import { StoreStateProps } from '../store';
 import MenuCustom, { ChangeDataProps } from '../menu/MenuCustom';
+import { ExportTransformProps } from './ArrayComponet/anotherComponet/RectTransform';
 
 function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const dispactch = useDispatch();
@@ -51,11 +51,9 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputImage, setInputImage] = useState<HTMLImageElement | null>(null);
 
-  const [selectedCmp, setSelectedCmp] = useState<DataComponentProps | null>(
-    null,
-  );
+  const [selectedCmp, setSelectedCmp] = useState<string | null>(null);
 
-  const handleChangeIdSelected = (value: DataComponentProps) => {
+  const handleChangeIdSelected = (value: string) => {
     setSelectedCmp(value);
   };
 
@@ -144,7 +142,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   };
 
   const handleRalatData = (value: ChangeDataProps) => {
-    if (componenCanvas) {
+    if (componenCanvas.length > 0) {
       setComponeCanvas(prev => {
         return prev.map(pre => {
           if (pre.data.id === value.id) {
@@ -166,6 +164,44 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
                   typeof value.strokeWidth === 'string'
                     ? parseFloat(value.strokeWidth)
                     : value.strokeWidth,
+              },
+            };
+          }
+          return pre;
+        });
+      });
+    }
+  };
+
+  const handleTransformData = ({
+    id: idData,
+    pos: posData,
+    scale: scaleData,
+  }: ExportTransformProps) => {
+    if (componenCanvas.length > 0) {
+      setComponeCanvas(prev => {
+        return prev.map(pre => {
+          if (pre.data.id === idData) {
+            return {
+              type: pre.type,
+              data: {
+                ...pre.data,
+                x:
+                  typeof posData.x === 'string'
+                    ? parseFloat(posData.x)
+                    : posData.x,
+                y:
+                  typeof posData.y === 'string'
+                    ? parseFloat(posData.y)
+                    : posData.y,
+                scaleX:
+                  typeof scaleData.x === 'string'
+                    ? parseFloat(scaleData.x)
+                    : scaleData.x,
+                scaleY:
+                  typeof scaleData.y === 'string'
+                    ? parseFloat(scaleData.y)
+                    : scaleData.y,
               },
             };
           }
@@ -198,7 +234,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
       {getData.value &&
         selectedCmp &&
         componenCanvas.map(e => {
-          if (e.data.id === selectedCmp.id) {
+          if (e.data.id === selectedCmp) {
             return (
               <MenuCustom
                 handleRalatData={handleRalatData}
@@ -220,12 +256,12 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
       >
         <Layer>
           <AnotherComponent
+            sendTransformData={handleTransformData}
             sendIdSelectedCmp={handleChangeIdSelected}
-            selectedCmp={selectedCmp?.id}
+            selectedCmp={selectedCmp}
             componenCanvas={componenCanvas}
             draggable={modeTypeCanvas === 'SELECT'}
           />
-
           {modeTypeCanvas === 'CIRCLE' && (
             <AddCircle
               stageRef={stageRef}

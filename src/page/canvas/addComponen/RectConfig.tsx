@@ -33,6 +33,8 @@ export function RectConfigMouseDownOrMove({
           y: pos.y,
           stroke: 'black',
           strokeWidth: 1,
+          scaleX: 1,
+          scaleY: 1,
         };
       }
     }

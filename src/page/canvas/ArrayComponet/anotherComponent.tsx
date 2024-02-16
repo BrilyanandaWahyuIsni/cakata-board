@@ -1,28 +1,28 @@
-import { Circle, Image, Shape, Star, Text } from 'react-konva';
-import {
-  ComponenCanvasProps,
-  DataCircleProps,
-  DataComponentProps,
-  DataImageProps,
-  DataShapeProps,
-  DataStarProps,
-  DataTextProps,
-} from '../freeBrushCanvasConfig';
-import RectTransform from './anotherComponet/RectTransform';
+import { ComponenCanvasProps } from '../freeBrushCanvasConfig';
+import RectTransform, {
+  ExportTransformProps,
+} from './anotherComponet/RectTransform';
 import { Fragment } from 'react';
+import CircleTransform from './anotherComponet/CircleTransform';
+import ShapeTransform from './anotherComponet/ShapeTransform';
+import StarTransform from './anotherComponet/StarTransform';
+import ImageTransform from './anotherComponet/ImageTransform';
+import TextTransform from './anotherComponet/TextTransform';
 
 export default function AnotherComponent({
   componenCanvas,
   draggable,
   selectedCmp,
   sendIdSelectedCmp,
+  sendTransformData,
 }: {
   componenCanvas: Array<ComponenCanvasProps> | [];
   draggable: boolean;
   selectedCmp: string | null | undefined;
-  sendIdSelectedCmp: (value: DataComponentProps) => void;
+  sendIdSelectedCmp: (value: string) => void;
+  sendTransformData: ({ id, pos, scale }: ExportTransformProps) => void;
 }) {
-  const handleClickComponent = (value: DataComponentProps) => {
+  const handleClickComponent = (value: string) => {
     sendIdSelectedCmp(value);
   };
 
@@ -31,104 +31,62 @@ export default function AnotherComponent({
       {componenCanvas.map(cmp => {
         if (cmp.type === 'CIRCLE') {
           return (
-            <Circle
-              id={cmp.data.id}
-              key={cmp.data.id}
-              radius={(cmp.data as DataCircleProps).radius}
-              rotation={(cmp.data as DataCircleProps).rotation}
-              x={cmp.data.x}
-              y={cmp.data.y}
-              fill={cmp.data.fill}
-              stroke={cmp.data.stroke}
-              strokeWidth={cmp.data.strokeWidth}
+            <CircleTransform
+              sendTransformData={sendTransformData}
+              cmp={cmp}
               draggable={draggable}
+              handleClick={() => handleClickComponent(cmp.data.id)}
+              isSelected={draggable && cmp.data.id === selectedCmp}
             />
           );
         } else if (cmp.type === 'RECT') {
           return (
             <RectTransform
+              sendTransformData={sendTransformData}
               cmp={cmp}
               draggable={draggable}
-              handleClick={() => handleClickComponent(cmp.data)}
+              handleClick={() => handleClickComponent(cmp.data.id)}
               isSelected={draggable && cmp.data.id === selectedCmp}
             />
           );
         } else if (cmp.type === 'TRIAGLE') {
           return (
-            <Shape
-              id={cmp.data.id}
-              key={cmp.data.id}
-              sceneFunc={(context, shape) => {
-                context.beginPath();
-                context.moveTo(
-                  (cmp.data as DataShapeProps).customPoint[0],
-                  (cmp.data as DataShapeProps).customPoint[1],
-                );
-                for (
-                  let i = 2;
-                  i < (cmp.data as DataShapeProps).customPoint.length;
-                  i += 2
-                ) {
-                  context.lineTo(
-                    (cmp.data as DataShapeProps).customPoint[i],
-                    (cmp.data as DataShapeProps).customPoint[i + 1],
-                  );
-                }
-                context.closePath();
-                context.fillStrokeShape(shape);
-              }}
-              x={cmp.data.x}
-              y={cmp.data.y}
-              fill={cmp.data.fill}
-              stroke={cmp.data.stroke}
-              strokeWidth={4}
+            <ShapeTransform
+              sendTransformData={sendTransformData}
+              cmp={cmp}
               draggable={draggable}
+              handleClick={() => handleClickComponent(cmp.data.id)}
+              isSelected={draggable && cmp.data.id === selectedCmp}
             />
           );
         } else if (cmp.type === 'STAR') {
           return (
-            <Star
-              id={cmp.data?.id}
-              key={cmp.data?.id}
-              numPoints={cmp.data ? (cmp.data as DataStarProps).numPoints : 0}
-              x={cmp.data?.x}
-              y={cmp.data?.y}
-              rotation={(cmp.data as DataStarProps).rotation}
-              innerRadius={
-                cmp.data ? (cmp.data as DataStarProps).innerRadius : 0
-              }
-              outerRadius={
-                cmp.data ? (cmp.data as DataStarProps).outerRadius : 0
-              }
-              fill={cmp.data?.fill}
-              stroke={cmp.data?.stroke}
-              strokeWidth={cmp.data?.strokeWidth}
+            <StarTransform
+              sendTransformData={sendTransformData}
+              cmp={cmp}
               draggable={draggable}
+              handleClick={() => handleClickComponent(cmp.data.id)}
+              isSelected={draggable && cmp.data.id === selectedCmp}
             />
           );
         } else if (cmp.type === 'TEXT') {
           return (
-            <Text
-              id={cmp.data.id}
-              key={cmp.data.id}
-              text={(cmp.data as DataTextProps).text}
-              x={cmp.data.x}
-              y={
-                cmp ? cmp.data.y - (cmp.data as DataTextProps).fontSize + 2 : 0
-              }
-              fontSize={(cmp.data as DataTextProps).fontSize}
-              fontFamily={(cmp.data as DataTextProps).fontFamily}
-              fill={cmp.data.fill}
+            <TextTransform
+              sendTransformData={sendTransformData}
+              cmp={cmp}
               draggable={draggable}
+              handleClick={() => handleClickComponent(cmp.data.id)}
+              isSelected={draggable && cmp.data.id === selectedCmp}
             />
           );
         } else if (cmp.type === 'IMAGE') {
           return (
-            <Image
-              key={cmp.data.id}
-              id={cmp.data.id}
-              image={(cmp.data as DataImageProps).image}
+            <ImageTransform
+              sendTransformData={sendTransformData}
+              cmp={cmp}
               draggable={draggable}
+              handleClick={() => handleClickComponent(cmp.data.id)}
+              isSelected={draggable && cmp.data.id === selectedCmp}
             />
           );
         }

@@ -26,6 +26,8 @@ export function CircleConfigMouseDown(
         stroke: 'black',
         strokeWidth: 5,
         fill: 'white',
+        scaleX: 1,
+        scaleY: 1,
       };
       return dataCircle;
     }
@@ -109,6 +111,8 @@ export function AddCircle({ stageRef, sendDataCircle }: CircleConfigProps) {
       fill={addCircle?.fill}
       stroke={addCircle?.stroke}
       strokeWidth={addCircle?.strokeWidth}
+      scaleX={addCircle?.scaleX}
+      scaleY={addCircle?.scaleY}
       ref={circleRef}
     />
   );

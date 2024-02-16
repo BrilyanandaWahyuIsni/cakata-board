@@ -52,6 +52,8 @@ export function AddStar({ stageRef, sendDataStar }: AddStar) {
           x: newPos.x,
           y: newPos.y,
           rotation: 180,
+          scaleX: 1,
+          scaleY: 1,
         });
       }
     };
@@ -108,6 +110,8 @@ export function AddStar({ stageRef, sendDataStar }: AddStar) {
       numPoints={addStar ? addStar?.numPoints : 0}
       x={addStar?.x}
       y={addStar?.y}
+      scaleX={addStar?.scaleX}
+      scaleY={addStar?.scaleY}
       rotation={addStar?.rotation}
       innerRadius={addStar ? addStar?.innerRadius : 0}
       outerRadius={addStar ? addStar?.outerRadius : 0}

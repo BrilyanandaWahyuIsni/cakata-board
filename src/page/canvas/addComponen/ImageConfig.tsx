@@ -17,12 +17,14 @@ export function AddImage({ image, sendDataImage }: DataImageConfig) {
           image: image,
           x: 0,
           y: 0,
+          scaleX: 1,
+          scaleY: 1,
           fill: 'white',
           stroke: 'black',
           strokeWidth: 2,
         },
       });
     }
-  }, []);
+  }, [image, sendDataImage]);
   return <Image image={image} />;
 }

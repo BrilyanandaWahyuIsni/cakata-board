@@ -17,6 +17,8 @@ export type DataRectProps = {
   height: number;
   x: number;
   y: number;
+  scaleX: number;
+  scaleY: number;
   stroke: string;
   strokeWidth: number;
   fill: string;
@@ -27,6 +29,8 @@ export type DataCircleProps = {
   radius: number;
   x: number;
   y: number;
+  scaleX: number;
+  scaleY: number;
   stroke: string;
   strokeWidth: number;
   fill: string;
@@ -37,6 +41,8 @@ export type DataShapeProps = {
   id: string;
   x: number;
   y: number;
+  scaleX: number;
+  scaleY: number;
   fill: string;
   stroke: string;
   strokeWidth: number;
@@ -48,6 +54,8 @@ export type DataStarProps = {
   numPoints: number;
   x: number;
   y: number;
+  scaleX: number;
+  scaleY: number;
   innerRadius: number;
   outerRadius: number;
   fill: string;
@@ -69,6 +77,8 @@ export type DataTextProps = {
   text: string;
   x: number;
   y: number;
+  scaleX: number;
+  scaleY: number;
   fill: string;
   fontSize: number;
   fontFamily: string;
@@ -81,6 +91,8 @@ export type DataImageProps = {
   image: CanvasImageSource;
   x: number;
   y: number;
+  scaleX: number;
+  scaleY: number;
   fill: string;
   stroke: string;
   strokeWidth: number;

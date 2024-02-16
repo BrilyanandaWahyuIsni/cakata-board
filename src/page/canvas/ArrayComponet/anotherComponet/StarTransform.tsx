@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import {
   ComponenCanvasProps,
-  DataRectProps,
+  DataStarProps,
 } from '../../freeBrushCanvasConfig';
-import { Rect, Transformer } from 'react-konva';
+import { Star, Transformer } from 'react-konva';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useDispatch } from 'react-redux';
@@ -23,7 +23,7 @@ export type RectTransformProps = {
   handleClick: () => void;
   sendTransformData: ({ id, pos, scale }: ExportTransformProps) => void;
 };
-export default function RectTransform({
+export default function StarTransform({
   cmp,
   draggable,
   handleClick,
@@ -32,7 +32,7 @@ export default function RectTransform({
 }: RectTransformProps) {
   const dispactch = useDispatch();
 
-  const rectRef = useRef<Konva.Rect>(null);
+  const starRef = useRef<Konva.Star>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
 
   const handleDragEnd = (evt: KonvaEventObject<DragEvent>) => {
@@ -46,14 +46,14 @@ export default function RectTransform({
   const handleTransformENd = (evt: KonvaEventObject<Event>) => {
     sendTransformData({
       id: cmp.data.id,
-      pos: evt.target.position(),
+      pos: { x: cmp.data.x, y: cmp.data.y },
       scale: evt.target.scale() as Vector2d,
     });
   };
 
   useEffect(() => {
-    if (isSelected && rectRef.current) {
-      transformerRef.current?.nodes([rectRef.current]);
+    if (isSelected && starRef.current) {
+      transformerRef.current?.nodes([starRef.current]);
       transformerRef.current?.getLayer()?.batchDraw();
       dispactch(setShowCmp({ value: true }));
     }
@@ -61,19 +61,21 @@ export default function RectTransform({
 
   return (
     <>
-      <Rect
+      <Star
         key={cmp.data.id}
         id={cmp.data.id}
-        width={(cmp.data as DataRectProps).width}
-        height={(cmp.data as DataRectProps).height}
         x={cmp.data.x}
         y={cmp.data.y}
+        numPoints={(cmp.data as DataStarProps).numPoints}
+        innerRadius={(cmp.data as DataStarProps).innerRadius}
+        outerRadius={(cmp.data as DataStarProps).outerRadius}
+        rotation={(cmp.data as DataStarProps).rotation}
         scaleX={cmp.data.scaleX}
         scaleY={cmp.data.scaleY}
         fill={cmp.data.fill}
         stroke={cmp.data.stroke}
         strokeWidth={cmp.data.strokeWidth}
-        ref={rectRef}
+        ref={starRef}
         draggable={draggable}
         onClick={handleClick}
         onDragEnd={handleDragEnd}
@@ -83,10 +85,12 @@ export default function RectTransform({
         <Transformer
           ref={transformerRef}
           keepRatio={false}
-          borderStrokeWidth={0} // Menonaktifkan border untuk Transformer
-          anchorFill="#ffffff" // Warna fill untuk anchor point
-          borderDash={[2, 2]} // Garis putus-putus untuk garis yang mengelilingi bentuk
-          borderStroke="#00ffff" // Warna stroke untuk garis yang mengelilingi bentuk
+          borderStrokeWidth={1}
+          anchorFill="#ffffff"
+          borderDash={[2, 2]}
+          borderStroke="#00ffff"
+          // rotateEnabled={false}
+          rotateAnchorOffset={10}
         />
       )}
     </>

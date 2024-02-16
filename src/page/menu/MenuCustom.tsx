@@ -1,8 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { ColorResult, SketchPicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { useDispatch } from 'react-redux';
-import { rubahDataKomponen } from '../store/show-clickComponent';
 import { DataComponentProps } from '../canvas/freeBrushCanvasConfig';
 
 export type ModeMenuProps =
@@ -32,16 +30,6 @@ export default function MenuCustom({
   handleRalatData,
   componentData,
 }: MenuCustomProps) {
-  const dispacth = useDispatch();
-  const [ralatData, setRalatData] = useState<ChangeDataProps>({
-    id: componentData.id,
-    fill: componentData.fill,
-    stroke: componentData.stroke,
-    strokeWidth: componentData.strokeWidth,
-    posX: componentData.x,
-    posY: componentData.y,
-  });
-
   const [modeMenu, setModeMenu] = useState<ModeMenuProps | null>(
     'STROKE WIDTH',
   );
@@ -56,17 +44,27 @@ export default function MenuCustom({
 
   const handleChangeValueData = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRalatData(prev => ({ ...prev, [name]: value }));
-    handleRalatData(ralatData);
+    const newData = {
+      id: componentData.id,
+      fill: componentData.fill,
+      stroke: componentData.stroke,
+      strokeWidth: componentData.strokeWidth,
+      posX: componentData.x,
+      posY: componentData.y,
+    };
+    handleRalatData({ ...newData, [name]: value });
   };
 
   const handleChangeColor = (e: ColorResult, name: string) => {
-    setRalatData(prev => ({ ...prev, [name]: e.hex }));
-    handleRalatData(ralatData);
-  };
-
-  const rubahData = () => {
-    dispacth(rubahDataKomponen({ change: false }));
+    const newData = {
+      id: componentData.id,
+      fill: componentData.fill,
+      stroke: componentData.stroke,
+      strokeWidth: componentData.strokeWidth,
+      posX: componentData.x,
+      posY: componentData.y,
+    };
+    handleRalatData({ ...newData, [name]: e.hex });
   };
 
   return (
@@ -142,7 +140,6 @@ export default function MenuCustom({
                 value={componentData.strokeWidth}
                 className="w-full text-black"
                 name="strokeWidth"
-                onBlur={rubahData}
                 onChange={handleChangeValueData}
               />
               <input
@@ -153,7 +150,6 @@ export default function MenuCustom({
                 min={0}
                 max={100}
                 onChange={handleChangeValueData}
-                onBlur={rubahData}
               />
             </div>
           )}
@@ -191,7 +187,6 @@ export default function MenuCustom({
                   value={componentData.y}
                   name="posY"
                   onChange={handleChangeValueData}
-                  onBlur={rubahData}
                 />
               </div>
             </div>
