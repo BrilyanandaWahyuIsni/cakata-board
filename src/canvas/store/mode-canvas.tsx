@@ -6,7 +6,7 @@ const initialState: InitialStateProps = {
   value: 'BRUSH',
 };
 
-const ModeCanvas = createSlice({
+const modeCanvas = createSlice({
   name: 'modeCanvas',
   initialState: initialState,
   reducers: {
@@ -16,5 +16,5 @@ const ModeCanvas = createSlice({
   },
 });
 
-export const { setModeCanvas } = ModeCanvas.actions;
-export default ModeCanvas.reducer;
+export const { setModeCanvas } = modeCanvas.actions;
+export default modeCanvas.reducer;

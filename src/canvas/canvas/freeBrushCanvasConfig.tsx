@@ -9,7 +9,8 @@ export type TypeComponenCanvasProps =
   | 'STAR'
   | 'SELECT'
   | 'TEXT'
-  | 'IMAGE';
+  | 'IMAGE'
+  | 'SETTING';
 
 export type DataRectProps = {
   id: string;
@@ -88,7 +89,7 @@ export type DataTextProps = {
 
 export type DataImageProps = {
   id: string;
-  image: CanvasImageSource;
+  image: HTMLImageElement;
   x: number;
   y: number;
   scaleX: number;
@@ -119,5 +120,7 @@ export type AllSaveDataProps = {
 export type FreeBrushCanvasProps = {
   sizeBrush: number;
   colorBrush: string;
+  lines: LineProps[] | [];
+  componentCanvas: ComponenCanvasProps[] | [];
   handleSendScale: (value: number) => void;
 };

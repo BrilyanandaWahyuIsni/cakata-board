@@ -9,6 +9,7 @@ import {
   sizeIcon,
 } from '../config/GlobalVariabel';
 import ShapeMenu from './ShapeMenu';
+import { IoSettings } from 'react-icons/io5';
 
 type MainMenuProps = {
   modeTypeCanvas: modeCanvas;
@@ -125,6 +126,23 @@ export default function MainMenu({
           <BsTextareaT
             color={
               modeTypeCanvas === 'TEXT' ? colorIcon.active : colorIcon.nonActive
+            }
+            size={sizeIcon.size}
+          />
+        </button>
+        {/* show setting */}
+        <button
+          className={classIcon.active}
+          type="button"
+          onClick={() => {
+            handleValue('SETTING');
+          }}
+        >
+          <IoSettings
+            color={
+              modeTypeCanvas === 'SETTING'
+                ? colorIcon.active
+                : colorIcon.nonActive
             }
             size={sizeIcon.size}
           />

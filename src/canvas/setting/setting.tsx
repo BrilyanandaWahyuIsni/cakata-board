@@ -3,8 +3,12 @@ import { ShortPress } from './config/mode';
 import KeydownDiv from './config/keydown';
 import uuid4 from 'uuid4';
 import { shortcutApp, shortcutAppProps } from '../config/Shortcut';
+import { IoClose } from 'react-icons/io5';
+import { useDispatch } from 'react-redux';
+import { setModeCanvas } from '../store/mode-canvas';
 
 export default function HomeSetting() {
+  const dispatch = useDispatch();
   const [saveModeCanvas, setSaveModeCanvas] = useState<shortcutAppProps>({
     move: shortcutApp.move,
     brush: shortcutApp.brush,
@@ -43,7 +47,17 @@ export default function HomeSetting() {
   return (
     <>
       {showKeyDown && <KeydownDiv sendData={handleDataMode} />}
-      <div className="w-3/4 h-3/4 absolute bg-orange-400 rounded-2xl z-30 top-[12.5%] left-[12.5%] shadow-2xl overflow-hidden">
+      <div className="w-full absolute h-full bg-orange-400 opacity-80 z-[25]"></div>
+      <div className="w-3/4 h-3/4 absolute bg-orange-500 rounded-2xl z-30 top-[12.5%] left-[12.5%] shadow-2xl overflow-hidden">
+        <button
+          type="button"
+          className="absolute top-2 right-2 bg-slate-700 rounded-full p-2 text-gray-200 hover:bg-slate-900 hover:text-gray-100"
+          onClick={() => {
+            dispatch(setModeCanvas({ value: 'BRUSH' }));
+          }}
+        >
+          <IoClose size={32} />
+        </button>
         <div className="w-full text-center p-3 text-3xl text-white">
           <h1 className="underline underline-offset-8">Pengaturan</h1>
         </div>

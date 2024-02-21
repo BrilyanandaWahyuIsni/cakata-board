@@ -62,7 +62,7 @@ export default function ImageTransform({
   return (
     <>
       <Image
-        image={(cmp.data as DataImageProps).image}
+        image={(cmp.data as DataImageProps).image as HTMLImageElement}
         key={cmp.data.id}
         id={cmp.data.id}
         x={cmp.data.x}

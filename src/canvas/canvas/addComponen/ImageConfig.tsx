@@ -14,7 +14,7 @@ export function AddImage({ image, sendDataImage }: DataImageConfig) {
         type: 'IMAGE',
         data: {
           id: uuid4(),
-          image: image,
+          image: image as never,
           x: 0,
           y: 0,
           scaleX: 1,

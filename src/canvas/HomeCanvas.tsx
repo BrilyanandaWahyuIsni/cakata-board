@@ -9,8 +9,17 @@ import { StoreStateProps } from './store';
 import { setModeCanvas } from './store/mode-canvas';
 import HomeSetting from './setting/setting';
 import { shortcutApp, shortcutAppProps } from './config/Shortcut';
+import { useLocation } from 'react-router-dom';
+import {
+  ComponenCanvasProps,
+  DataImageProps,
+} from './canvas/freeBrushCanvasConfig';
+import { ReturnBaseStrukturProps } from '../saveData/baseStruktur';
 
 export default function HomeCanvas() {
+  const data = useLocation();
+  const [dataMasukan, setDataMasukan] = useState<ReturnBaseStrukturProps>();
+
   const dispatch = useDispatch();
   const modeTypeCanvas = useSelector(
     (state: StoreStateProps) => state.modeCanvas.value,
@@ -31,6 +40,7 @@ export default function HomeCanvas() {
   const handleChangeColor = (e: string) => {
     setColorBrush(e);
   };
+
   useEffect(() => {
     const changeCanvasWithWindows = (e: KeyboardEvent) => {
       if (modeTypeCanvas !== 'TEXT') {
@@ -52,6 +62,15 @@ export default function HomeCanvas() {
         }
 
         if (keyPress.join().length > 0) {
+          // size brush
+          if (keyPress.join() === '[') {
+            setSizeBrush(prev => prev - defaultBrushAdd);
+          }
+          if (keyPress.join() === ']') {
+            setSizeBrush(prev => prev + defaultBrushAdd);
+          }
+
+          // color base
           if (keyPress.join() === parseJsonShortcut.black.join()) {
             setColorBrush('black');
           }
@@ -68,13 +87,7 @@ export default function HomeCanvas() {
             setColorBrush('yellow');
           }
 
-          if (e.key === 'BracketLeft') {
-            setSizeBrush(prev => prev - defaultBrushAdd);
-          }
-          if (e.key === 'BracketRight') {
-            setSizeBrush(prev => prev + defaultBrushAdd);
-          }
-
+          // tools mode
           if (keyPress.join('') === parseJsonShortcut.move.join('')) {
             dispatch(setModeCanvas({ value: 'PAN' }));
           }
@@ -110,10 +123,28 @@ export default function HomeCanvas() {
     };
     window.addEventListener('keydown', changeCanvasWithWindows);
 
+    if (data.state.data) {
+      const dataBaru = data.state.data.ComponentCanvas.map(
+        (e: ComponenCanvasProps) => {
+          if (e.type === 'IMAGE') {
+            const urlImg = new window.Image();
+            urlImg.src = (e.data as DataImageProps).image as never;
+            return { type: e.type, data: { ...e.data, image: urlImg } };
+          } else {
+            return e;
+          }
+        },
+      );
+
+      setDataMasukan({ ...data.state.data, ComponentCanvas: dataBaru });
+    } else {
+      setDataMasukan({ ...data.state.data, ComponentCanvas: [], lines: [] });
+    }
+
     return () => {
       window.removeEventListener('keydown', changeCanvasWithWindows);
     };
-  }, [dispatch, modeTypeCanvas]);
+  }, [data.state.data, dispatch, modeTypeCanvas]);
 
   return (
     <div
@@ -123,7 +154,7 @@ export default function HomeCanvas() {
         cursor: modePointerWindows(modeTypeCanvas, sizeBrush * scaleCanvas),
       }}
     >
-      <HomeSetting />
+      {modeTypeCanvas === 'SETTING' && <HomeSetting />}
       <MainMenu
         handleValue={e => handleValue(e)}
         modeTypeCanvas={modeTypeCanvas}
@@ -131,11 +162,15 @@ export default function HomeCanvas() {
       {modeTypeCanvas === 'BRUSH' && (
         <MainColor handleSendColor={handleChangeColor} />
       )}
-      <FreeBrushCanvas
-        sizeBrush={sizeBrush}
-        colorBrush={colorBrush}
-        handleSendScale={handleReceiveScale}
-      />
+      {dataMasukan && (
+        <FreeBrushCanvas
+          lines={dataMasukan.lines}
+          componentCanvas={dataMasukan.ComponentCanvas}
+          sizeBrush={sizeBrush}
+          colorBrush={colorBrush}
+          handleSendScale={handleReceiveScale}
+        />
+      )}
     </div>
   );
 }

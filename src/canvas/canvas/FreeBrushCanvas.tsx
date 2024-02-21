@@ -4,6 +4,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import Konva from 'konva';
 import {
   ComponenCanvasProps,
+  DataImageProps,
   FreeBrushCanvasProps,
   LineProps,
 } from './freeBrushCanvasConfig';
@@ -24,6 +25,12 @@ import { setShowCmp } from '../store/show-clickComponent';
 import { StoreStateProps } from '../store';
 import MenuCustom, { ChangeDataProps } from '../menu/MenuCustom';
 import { ExportTransformProps } from './ArrayComponet/anotherComponet/RectTransform';
+import {
+  encryptJSON,
+  keyNandaBrilyanandaWahyuIsni,
+} from '../config/EncripsiData';
+import { baseStruktur } from '../../saveData/baseStruktur';
+import { saveTextToFile } from '../config/SaveObject';
 
 function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const dispactch = useDispatch();
@@ -34,12 +41,13 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     (state: StoreStateProps) => state.showDataComponent,
   );
 
-  const [componenCanvas, setComponeCanvas] = useState<
+  const [componentCanvas, setComponentCanvas] = useState<
     Array<ComponenCanvasProps> | []
-  >([]);
+  >(props.componentCanvas);
 
   // line setting
-  const [lines, setLines] = useState<Array<LineProps> | []>([]);
+  const [lines, setLines] = useState<Array<LineProps> | []>(props.lines);
+  // const [lines, setLines] = useState<Array<LineProps> | []>([]);
   const [addLine, setAddLine] = useState<LineProps | null>(null);
   const lineRef = useRef<Konva.Line>(null);
 
@@ -49,7 +57,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const isDrawing = useRef(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const [inputImage, setInputImage] = useState<HTMLImageElement | null>(null);
+  const [inputImage, setInputImage] = useState<CanvasImageSource | null>(null);
 
   const [selectedCmp, setSelectedCmp] = useState<string | null>(null);
 
@@ -116,7 +124,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   };
 
   const handleDataComponent = (value: ComponenCanvasProps) => {
-    setComponeCanvas(prev => [...prev, value]);
+    setComponentCanvas(prev => [...prev, value]);
     if (modeTypeCanvas === 'IMAGE') {
       setInputImage(null);
     }
@@ -134,6 +142,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
           setInputImage(img);
         };
         img.src = reader.result;
+        // setInputImage(img.src);
       }
     };
     if (file) {
@@ -142,8 +151,8 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   };
 
   const handleRalatData = (value: ChangeDataProps) => {
-    if (componenCanvas.length > 0) {
-      setComponeCanvas(prev => {
+    if (componentCanvas.length > 0) {
+      setComponentCanvas(prev => {
         return prev.map(pre => {
           if (pre.data.id === value.id) {
             return {
@@ -178,8 +187,8 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     pos: posData,
     scale: scaleData,
   }: ExportTransformProps) => {
-    if (componenCanvas.length > 0) {
-      setComponeCanvas(prev => {
+    if (componentCanvas.length > 0) {
+      setComponentCanvas(prev => {
         return prev.map(pre => {
           if (pre.data.id === idData) {
             return {
@@ -211,6 +220,30 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     }
   };
 
+  const handleSaveData = () => {
+    const saveComponent = componentCanvas.map(e => {
+      if (e.type === 'IMAGE') {
+        const imgSrc = (e.data as DataImageProps).image;
+        return {
+          type: e.type,
+          data: {
+            ...e.data,
+            image: imgSrc.src as never,
+          },
+        };
+      } else {
+        return e;
+      }
+    });
+
+    const jsonData = baseStruktur({
+      componentCanvas: saveComponent,
+      lines: lines,
+    });
+    const data = encryptJSON(jsonData, keyNandaBrilyanandaWahyuIsni);
+    saveTextToFile({ textToSave: data, nameFile: 'nanda' });
+  };
+
   useEffect(() => {
     if (modeTypeCanvas === 'IMAGE') {
       if (inputRef.current) {
@@ -224,6 +257,13 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
 
   return (
     <>
+      <button
+        type="button"
+        className="absolute p-2 bg-orange-950 hover:bg-orange-800 z-30"
+        onClick={handleSaveData}
+      >
+        save
+      </button>
       <input
         onChange={handleChangeInput}
         type="file"
@@ -233,7 +273,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
       />
       {getData.value &&
         selectedCmp &&
-        componenCanvas.map(e => {
+        componentCanvas.map(e => {
           if (e.data.id === selectedCmp) {
             return (
               <MenuCustom
@@ -259,7 +299,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
             sendTransformData={handleTransformData}
             sendIdSelectedCmp={handleChangeIdSelected}
             selectedCmp={selectedCmp}
-            componenCanvas={componenCanvas}
+            componenCanvas={componentCanvas}
             draggable={modeTypeCanvas === 'SELECT'}
           />
           {modeTypeCanvas === 'CIRCLE' && (
