@@ -87,6 +87,7 @@ export function AddText({ stageRef, sendDataText }: AddTextProps) {
           strokeWidth: 0,
           scaleX: 1,
           scaleY: 1,
+          rotation: 0,
         });
       }
     };
@@ -138,6 +139,7 @@ export function AddText({ stageRef, sendDataText }: AddTextProps) {
         y={addText ? addText?.y - addText.fontSize + 2 : 0}
         scaleX={addText?.scaleX}
         scaleY={addText?.scaleY}
+        rotation={addText?.rotation}
         fontSize={addText?.fontSize}
         fontFamily={addText?.fontFamily}
         fill={addText?.fill}

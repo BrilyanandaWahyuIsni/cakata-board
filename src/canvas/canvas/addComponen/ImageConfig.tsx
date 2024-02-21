@@ -17,6 +17,7 @@ export function AddImage({ image, sendDataImage }: DataImageConfig) {
           image: image as never,
           x: 0,
           y: 0,
+          rotation: 0,
           scaleX: 1,
           scaleY: 1,
           fill: 'white',

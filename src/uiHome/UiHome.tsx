@@ -23,7 +23,6 @@ export default function UiHome() {
             e.target?.result as string,
             keyNandaBrilyanandaWahyuIsni,
           );
-
           setDataFile(dataSend);
         };
         reader.readAsText(filesRef.current.files[0]);

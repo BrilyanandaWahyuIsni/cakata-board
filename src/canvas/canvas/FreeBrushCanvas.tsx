@@ -221,6 +221,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     id: idData,
     pos: posData,
     scale: scaleData,
+    rotation: rotationData,
   }: ExportTransformProps) => {
     if (componentCanvas.length > 0) {
       setComponentCanvas(prev => {
@@ -232,20 +233,24 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
                 ...pre.data,
                 x:
                   typeof posData.x === 'string'
-                    ? parseFloat(posData.x)
+                    ? parseInt(posData.x)
                     : posData.x,
                 y:
                   typeof posData.y === 'string'
-                    ? parseFloat(posData.y)
+                    ? parseInt(posData.y)
                     : posData.y,
                 scaleX:
                   typeof scaleData.x === 'string'
-                    ? parseFloat(scaleData.x)
+                    ? parseInt(scaleData.x)
                     : scaleData.x,
                 scaleY:
                   typeof scaleData.y === 'string'
-                    ? parseFloat(scaleData.y)
+                    ? parseInt(scaleData.y)
                     : scaleData.y,
+                rotation:
+                  typeof rotationData === 'string'
+                    ? parseInt(rotationData)
+                    : rotationData,
               },
             };
           }

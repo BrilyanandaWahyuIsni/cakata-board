@@ -108,6 +108,8 @@ export function AddCircle({ stageRef, sendDataCircle }: CircleConfigProps) {
       radius={addCircle?.radius}
       x={addCircle?.x}
       y={addCircle?.y}
+      scale={{ x: addCircle?.scaleX as never, y: addCircle?.scaleY as never }}
+      rotation={addCircle?.rotation}
       fill={addCircle?.fill}
       stroke={addCircle?.stroke}
       strokeWidth={addCircle?.strokeWidth}

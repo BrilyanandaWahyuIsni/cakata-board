@@ -25,6 +25,7 @@ export type DataRectProps = {
   stroke: string;
   strokeWidth: number;
   fill: string;
+  rotation: number;
 };
 
 export type DataCircleProps = {
@@ -50,6 +51,7 @@ export type DataShapeProps = {
   stroke: string;
   strokeWidth: number;
   customPoint: Array<number> | [];
+  rotation: number;
 };
 
 export type DataStarProps = {
@@ -87,6 +89,7 @@ export type DataTextProps = {
   fontFamily: string;
   stroke: string;
   strokeWidth: number;
+  rotation: number;
 };
 
 export type DataImageProps = {
@@ -99,6 +102,7 @@ export type DataImageProps = {
   fill: string;
   stroke: string;
   strokeWidth: number;
+  rotation: number;
 };
 
 export type DataComponentProps =

@@ -47,6 +47,7 @@ export function AddShapeTriagle({
           id: uuid4(),
           x: pos?.x,
           y: pos?.y,
+          rotation: 0,
           scaleX: 1,
           scaleY: 1,
           fill: 'transparent',
@@ -119,6 +120,7 @@ export function AddShapeTriagle({
       stroke={addShape?.stroke}
       strokeWidth={4}
       ref={shapeRef}
+      rotation={addShape?.rotation}
     />
   );
 }

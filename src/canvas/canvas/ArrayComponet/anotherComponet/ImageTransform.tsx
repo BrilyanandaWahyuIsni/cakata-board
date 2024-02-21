@@ -9,19 +9,19 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { useDispatch } from 'react-redux';
 import { setShowCmp } from '../../../store/show-clickComponent';
 import { Vector2d } from 'konva/lib/types';
-
-export type ExportTransformProps = {
-  id: string;
-  pos: Vector2d;
-  scale: Vector2d;
-};
+import { ExportTransformProps } from './RectTransform';
 
 export type RectTransformProps = {
   cmp: ComponenCanvasProps;
   draggable: boolean;
   isSelected: boolean;
   handleClick: () => void;
-  sendTransformData: ({ id, pos, scale }: ExportTransformProps) => void;
+  sendTransformData: ({
+    id,
+    pos,
+    scale,
+    rotation,
+  }: ExportTransformProps) => void;
 };
 export default function ImageTransform({
   cmp,
@@ -40,6 +40,7 @@ export default function ImageTransform({
       id: cmp.data.id,
       pos: evt.target.position(),
       scale: { x: cmp.data.scaleX, y: cmp.data.scaleY },
+      rotation: cmp.data.rotation,
     });
   };
 
@@ -48,6 +49,7 @@ export default function ImageTransform({
       id: cmp.data.id,
       pos: evt.target.position(),
       scale: evt.target.scale() as Vector2d,
+      rotation: evt.target.rotation(),
     });
   };
 
@@ -69,6 +71,7 @@ export default function ImageTransform({
         y={cmp.data.y}
         scaleX={cmp.data.scaleX}
         scaleY={cmp.data.scaleY}
+        rotation={cmp.data.rotation}
         fill={cmp.data.fill}
         stroke={cmp.data.stroke}
         strokeWidth={cmp.data.strokeWidth}

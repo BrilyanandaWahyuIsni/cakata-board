@@ -20,7 +20,12 @@ export default function AnotherComponent({
   draggable: boolean;
   selectedCmp: string | null | undefined;
   sendIdSelectedCmp: (value: string) => void;
-  sendTransformData: ({ id, pos, scale }: ExportTransformProps) => void;
+  sendTransformData: ({
+    id,
+    pos,
+    scale,
+    rotation,
+  }: ExportTransformProps) => void;
 }) {
   const handleClickComponent = (value: string) => {
     sendIdSelectedCmp(value);

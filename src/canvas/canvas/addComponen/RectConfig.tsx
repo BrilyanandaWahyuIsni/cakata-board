@@ -33,6 +33,7 @@ export function RectConfigMouseDownOrMove({
           y: pos.y,
           stroke: 'black',
           strokeWidth: 1,
+          rotation: 0,
           scaleX: 1,
           scaleY: 1,
         };
@@ -118,8 +119,9 @@ export function AddRect({ stageRef, sendDataRect }: RectConfigProps) {
       height={addRect?.height}
       x={addRect?.x}
       y={addRect?.y}
-      scaleX={1}
-      scaleY={1}
+      scaleX={addRect?.scaleX}
+      scaleY={addRect?.scaleY}
+      rotation={addRect?.rotation}
       fill={'white'}
       stroke={'black'}
       strokeWidth={1}
