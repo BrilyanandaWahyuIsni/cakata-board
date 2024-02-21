@@ -68,6 +68,13 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const handleMouseDown = (event: KonvaEventObject<MouseEvent>) => {
     setLastId(uuid4());
 
+    if (modeTypeCanvas === 'ZOOMIN') {
+      handleZoomInOutCanvas({ isZoomIn: true });
+    }
+    if (modeTypeCanvas === 'ZOOMOUT') {
+      handleZoomInOutCanvas({ isZoomIn: false });
+    }
+
     if (modeTypeCanvas === 'BRUSH' || modeTypeCanvas === 'ERASER') {
       isDrawing.current = true;
       const { colorBrush, sizeBrush } = props;
@@ -120,6 +127,34 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     const newScale = zoomInOut(event);
     if (newScale) {
       props.handleSendScale(newScale);
+    }
+  };
+
+  const handleZoomInOutCanvas = ({ isZoomIn }: { isZoomIn: boolean }) => {
+    if (stageRef.current) {
+      const stage = stageRef.current.getStage();
+
+      const oldScale = stage.scaleX();
+      const getPointerPosition = stage.getPointerPosition();
+      if (getPointerPosition) {
+        const pos = getPointerPosition;
+        const newScale = isZoomIn ? oldScale * 1.1 : oldScale / 1.1;
+
+        const mousePointTo = {
+          x: (pos.x - stage.x()) / oldScale,
+          y: (pos.y - stage.y()) / oldScale,
+        };
+
+        stage.scale({ x: newScale, y: newScale });
+
+        const newPos = {
+          x: pos.x - mousePointTo.x * newScale,
+          y: pos.y - mousePointTo.y * newScale,
+        };
+
+        stage.position(newPos);
+        stage.batchDraw();
+      }
     }
   };
 
@@ -244,7 +279,61 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     saveTextToFile({ textToSave: data, nameFile: 'nanda' });
   };
 
+  const handleUpComponent = () => {
+    setComponentCanvas(prev => [
+      ...prev.filter(e => {
+        if (e.data.id !== selectedCmp) {
+          return e;
+        }
+      }),
+      ...prev.filter(ev => {
+        if (ev.data.id === selectedCmp) {
+          return ev;
+        }
+      }),
+    ]);
+  };
+  const handleDownComponent = () => {
+    setComponentCanvas(prev => [
+      ...prev.filter(e => {
+        if (e.data.id === selectedCmp) {
+          return e;
+        }
+      }),
+      ...prev.filter(ev => {
+        if (ev.data.id !== selectedCmp) {
+          return ev;
+        }
+      }),
+    ]);
+  };
+
   useEffect(() => {
+    const changeKeyDown = (event: KeyboardEvent) => {
+      if (event.key === '/') {
+        handleZoomInOutCanvas({ isZoomIn: true });
+      }
+      if (event.key === '-') {
+        handleZoomInOutCanvas({ isZoomIn: false });
+      }
+
+      if (
+        event.key === 'Delete' &&
+        selectedCmp !== null &&
+        modeTypeCanvas === 'SELECT'
+      ) {
+        setComponentCanvas(prev =>
+          prev.filter(e => {
+            if (e.data.id !== selectedCmp) {
+              return e;
+            }
+          }),
+        );
+      }
+    };
+
+    window.addEventListener('keydown', changeKeyDown);
+
     if (modeTypeCanvas === 'IMAGE') {
       if (inputRef.current) {
         inputRef.current.click();
@@ -253,7 +342,11 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     if (modeTypeCanvas !== 'SELECT') {
       dispactch(setShowCmp({ value: false }));
     }
-  }, [dispactch, modeTypeCanvas]);
+
+    return () => {
+      window.removeEventListener('keydown', changeKeyDown);
+    };
+  }, [dispactch, modeTypeCanvas, selectedCmp]);
 
   return (
     <>
@@ -277,6 +370,8 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
           if (e.data.id === selectedCmp) {
             return (
               <MenuCustom
+                handleDownComponent={handleDownComponent}
+                handleUpComponent={handleUpComponent}
                 handleRalatData={handleRalatData}
                 componentData={e.data}
               />

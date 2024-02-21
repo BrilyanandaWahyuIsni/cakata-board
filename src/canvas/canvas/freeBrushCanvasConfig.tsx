@@ -10,7 +10,9 @@ export type TypeComponenCanvasProps =
   | 'SELECT'
   | 'TEXT'
   | 'IMAGE'
-  | 'SETTING';
+  | 'SETTING'
+  | 'ZOOMIN'
+  | 'ZOOMOUT';
 
 export type DataRectProps = {
   id: string;

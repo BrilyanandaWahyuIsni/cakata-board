@@ -1,4 +1,4 @@
-import { MdOutlinePanTool } from 'react-icons/md';
+import { MdOutlinePanTool, MdZoomIn, MdZoomOut } from 'react-icons/md';
 import { FaEraser, FaImage, FaPencil, FaShapes } from 'react-icons/fa6';
 import { GiArrowCursor } from 'react-icons/gi';
 import { BsTextareaT } from 'react-icons/bs';
@@ -126,6 +126,40 @@ export default function MainMenu({
           <BsTextareaT
             color={
               modeTypeCanvas === 'TEXT' ? colorIcon.active : colorIcon.nonActive
+            }
+            size={sizeIcon.size}
+          />
+        </button>
+        {/* zoom in */}
+        <button
+          className={classIcon.active}
+          type="button"
+          onClick={() => {
+            handleValue('ZOOMIN');
+          }}
+        >
+          <MdZoomIn
+            color={
+              modeTypeCanvas === 'ZOOMIN'
+                ? colorIcon.active
+                : colorIcon.nonActive
+            }
+            size={sizeIcon.size}
+          />
+        </button>
+        {/* zoom out */}
+        <button
+          className={classIcon.active}
+          type="button"
+          onClick={() => {
+            handleValue('ZOOMOUT');
+          }}
+        >
+          <MdZoomOut
+            color={
+              modeTypeCanvas === 'ZOOMOUT'
+                ? colorIcon.active
+                : colorIcon.nonActive
             }
             size={sizeIcon.size}
           />

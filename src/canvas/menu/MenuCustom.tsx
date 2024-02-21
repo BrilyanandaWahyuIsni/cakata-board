@@ -8,7 +8,8 @@ export type ModeMenuProps =
   | 'STROKE'
   | 'STROKE WIDTH'
   | 'POS'
-  | 'SKALA';
+  | 'SKALA'
+  | 'UP DOWN';
 
 export type ChangeDataProps = {
   id: string;
@@ -24,11 +25,15 @@ export type ChangeDataProps = {
 type MenuCustomProps = {
   handleRalatData: (value: ChangeDataProps) => void;
   componentData: DataComponentProps;
+  handleUpComponent: () => void;
+  handleDownComponent: () => void;
 };
 
 export default function MenuCustom({
   handleRalatData,
   componentData,
+  handleUpComponent,
+  handleDownComponent,
 }: MenuCustomProps) {
   const [modeMenu, setModeMenu] = useState<ModeMenuProps | null>(
     'STROKE WIDTH',
@@ -231,6 +236,30 @@ export default function MenuCustom({
             </div>
           )}
         </div> */}
+        {/* menu up atau down */}
+        <div className="w-full flex flex-col items-center">
+          <button
+            onClick={() => handleModeMenu('UP DOWN')}
+            className="py-1 mb-2  px-10 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
+          >
+            {modeMenu === 'UP DOWN' ? (
+              <IoIosArrowUp size={20} />
+            ) : (
+              <IoIosArrowDown size={20} />
+            )}
+            Diatas/Dibawah
+          </button>
+          {modeMenu === 'UP DOWN' && (
+            <div className="w-full flex gap-2 px-2">
+              <button type="button" onClick={handleUpComponent}>
+                Diatas
+              </button>
+              <button type="button" onClick={handleDownComponent}>
+                Dibawah
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
