@@ -31,6 +31,8 @@ import {
 } from '../config/EncripsiData';
 import { baseStruktur } from '../../saveData/baseStruktur';
 import { saveTextToFile } from '../config/SaveObject';
+import { IoIosSave } from 'react-icons/io';
+import ShowSaveData from '../menu/ShowSaveData';
 
 function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const dispactch = useDispatch();
@@ -60,6 +62,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
   const [inputImage, setInputImage] = useState<CanvasImageSource | null>(null);
 
   const [selectedCmp, setSelectedCmp] = useState<string | null>(null);
+  const [showSaveMenu, setShowSaveMenu] = useState<boolean>(false);
 
   const handleChangeIdSelected = (value: string) => {
     setSelectedCmp(value);
@@ -260,7 +263,7 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
     }
   };
 
-  const handleSaveData = () => {
+  const handleSaveData = (e: string) => {
     const saveComponent = componentCanvas.map(e => {
       if (e.type === 'IMAGE') {
         const imgSrc = (e.data as DataImageProps).image;
@@ -281,7 +284,8 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
       lines: lines,
     });
     const data = encryptJSON(jsonData, keyNandaBrilyanandaWahyuIsni);
-    saveTextToFile({ textToSave: data, nameFile: 'nanda' });
+    saveTextToFile({ textToSave: data, nameFile: e });
+    setShowSaveMenu(false);
   };
 
   const handleUpComponent = () => {
@@ -315,11 +319,13 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
 
   useEffect(() => {
     const changeKeyDown = (event: KeyboardEvent) => {
-      if (event.key === '/') {
-        handleZoomInOutCanvas({ isZoomIn: true });
-      }
-      if (event.key === '-') {
-        handleZoomInOutCanvas({ isZoomIn: false });
+      if (modeTypeCanvas !== 'TEXT' && modeTypeCanvas !== 'SETTING') {
+        if (event.key === '=') {
+          handleZoomInOutCanvas({ isZoomIn: true });
+        }
+        if (event.key === '-') {
+          handleZoomInOutCanvas({ isZoomIn: false });
+        }
       }
 
       if (
@@ -355,12 +361,18 @@ function FreeBrushCanvas(props: FreeBrushCanvasProps) {
 
   return (
     <>
+      {showSaveMenu && (
+        <ShowSaveData
+          handleCancelSave={() => setShowSaveMenu(false)}
+          handleSave={handleSaveData}
+        />
+      )}
       <button
         type="button"
-        className="absolute p-2 bg-orange-950 hover:bg-orange-800 z-30"
-        onClick={handleSaveData}
+        className="absolute bottom-3 right-3 p-3 text-stone-50 bg-slate-500 hover:bg-slate-400 z-30 rounded-full"
+        onClick={() => setShowSaveMenu(true)}
       >
-        save
+        <IoIosSave size={20} />
       </button>
       <input
         onChange={handleChangeInput}

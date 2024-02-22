@@ -7,10 +7,17 @@ import {
   decryptJSON,
   keyNandaBrilyanandaWahyuIsni,
 } from '../canvas/config/EncripsiData';
+import MiniCanvas from './miniCanvas/miniCanvas';
+import { ReturnBaseStrukturProps } from '../saveData/baseStruktur';
+import { DataImageProps } from '../canvas/canvas/freeBrushCanvasConfig';
 
 export default function UiHome() {
   const filesRef = useRef<HTMLInputElement>(null);
-  const [dataFile, setDataFile] = useState(null);
+  const [dataFile, setDataFile] = useState<ReturnBaseStrukturProps | null>(
+    null,
+  );
+  const [dataMiniCanvas, setDataMiniCanvas] =
+    useState<ReturnBaseStrukturProps | null>(null);
 
   const handleChangeFile = () => {
     if (filesRef.current?.files) {
@@ -19,11 +26,23 @@ export default function UiHome() {
 
       if (file instanceof Blob) {
         reader.onload = function (e) {
-          const dataSend = decryptJSON(
+          const dataSend: ReturnBaseStrukturProps = decryptJSON(
             e.target?.result as string,
             keyNandaBrilyanandaWahyuIsni,
           );
           setDataFile(dataSend);
+          const mnCanvas = dataSend.ComponentCanvas.map(e => {
+            if (e.type === 'IMAGE') {
+              const img = new window.Image();
+              img.src = (e.data as DataImageProps).image as never;
+              return { type: e.type, data: { ...e.data, image: img } };
+            }
+            return e;
+          });
+          setDataMiniCanvas({
+            ...dataSend,
+            ComponentCanvas: mnCanvas as never,
+          });
         };
         reader.readAsText(filesRef.current.files[0]);
       }
@@ -38,7 +57,7 @@ export default function UiHome() {
       <h1 className="w-full text-center text-3xl font-extrabold mb-10 text-slate-200 p-5 rounded-2xl bg-zinc-900 shadow-sm shadow-orange-200">
         Cakata Board
       </h1>
-      <div className="grid gap-10 grid-cols-3">
+      <div className="flex justify-center gap-6">
         {/* create new canvas */}
         <Link
           to={'/canvas'}
@@ -74,14 +93,20 @@ export default function UiHome() {
           />
         </label>
       </div>
-      <Link
-        to={{
-          pathname: '/canvas',
-        }}
-        state={{ data: dataFile }}
-      >
-        cavas
-      </Link>
+      {dataFile && (
+        <div className="w-full flex flex-col items-center justify-center">
+          <MiniCanvas data={dataMiniCanvas} />
+          <Link
+            className="p-4 px-2 absolute bottom-8 bg-green-950 text-white rounded-2xl right-1/2 translate-x-1/2"
+            to={{
+              pathname: '/canvas',
+            }}
+            state={{ data: dataFile }}
+          >
+            Edit Board Anda Sekarang
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

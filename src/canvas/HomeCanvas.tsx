@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import FreeBrushCanvas from './canvas/FreeBrushCanvas';
 import MainMenu from './menu/MainMenu';
 import { defaultBrushAdd, modeCanvas } from './config/GlobalVariabel';
@@ -9,7 +9,7 @@ import { StoreStateProps } from './store';
 import { setModeCanvas } from './store/mode-canvas';
 import HomeSetting from './setting/setting';
 import { shortcutApp, shortcutAppProps } from './config/Shortcut';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import {
   ComponenCanvasProps,
   DataImageProps,
@@ -18,6 +18,7 @@ import { ReturnBaseStrukturProps } from '../saveData/baseStruktur';
 
 export default function HomeCanvas() {
   const data = useLocation();
+
   const [dataMasukan, setDataMasukan] = useState<ReturnBaseStrukturProps>();
 
   const dispatch = useDispatch();
@@ -41,9 +42,17 @@ export default function HomeCanvas() {
     setColorBrush(e);
   };
 
+  const handleSizeBrush = (e: ChangeEvent<HTMLInputElement>) => {
+    setSizeBrush(
+      typeof e.target.value === 'string'
+        ? parseInt(e.target.value)
+        : e.target.value,
+    );
+  };
+
   useEffect(() => {
     const changeCanvasWithWindows = (e: KeyboardEvent) => {
-      if (modeTypeCanvas !== 'TEXT') {
+      if (modeTypeCanvas !== 'TEXT' && modeTypeCanvas !== 'SETTING') {
         const parseJsonShortcut: shortcutAppProps = JSON.parse(
           localStorage.getItem('shortcut') as never,
         )
@@ -144,8 +153,11 @@ export default function HomeCanvas() {
     return () => {
       window.removeEventListener('keydown', changeCanvasWithWindows);
     };
-  }, [data.state.data, dispatch, modeTypeCanvas]);
+  }, [data, dispatch, modeTypeCanvas]);
 
+  if (!data.state || !data) {
+    return <Navigate to={'/'} replace={true} />;
+  }
   return (
     <div
       className="relative w-full h-screen overflow-hidden"
@@ -160,7 +172,18 @@ export default function HomeCanvas() {
         modeTypeCanvas={modeTypeCanvas}
       />
       {modeTypeCanvas === 'BRUSH' && (
-        <MainColor handleSendColor={handleChangeColor} />
+        <MainColor
+          handleSendColor={handleChangeColor}
+          sizeBrush={sizeBrush}
+          handleSizeBrush={handleSizeBrush}
+        />
+      )}
+      {modeTypeCanvas === 'ERASER' && (
+        <MainColor
+          handleSendColor={handleChangeColor}
+          sizeBrush={sizeBrush}
+          handleSizeBrush={handleSizeBrush}
+        />
       )}
       {dataMasukan && (
         <FreeBrushCanvas

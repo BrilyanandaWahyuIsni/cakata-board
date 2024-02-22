@@ -1,7 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { ColorResult, SketchPicker } from 'react-color';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { DataComponentProps } from '../canvas/freeBrushCanvasConfig';
+import { IoColorFill } from 'react-icons/io5';
+import { MdBorderColor } from 'react-icons/md';
+import { BsBorderWidth, BsLayerBackward, BsLayerForward } from 'react-icons/bs';
 
 export type ModeMenuProps =
   | 'FILL'
@@ -35,9 +37,7 @@ export default function MenuCustom({
   handleUpComponent,
   handleDownComponent,
 }: MenuCustomProps) {
-  const [modeMenu, setModeMenu] = useState<ModeMenuProps | null>(
-    'STROKE WIDTH',
-  );
+  const [modeMenu, setModeMenu] = useState<ModeMenuProps | null>(null);
 
   const handleModeMenu = (value: ModeMenuProps) => {
     if (modeMenu === value) {
@@ -73,94 +73,106 @@ export default function MenuCustom({
   };
 
   return (
-    <div className="w-72 absolute bg-slate-700 rounded-3xl p-3 z-20 right-3 top-8 overflow-hidden">
-      <div className="w-full h-[calc(100vh-4rem)] flex flex-col gap-3 items-center overflow-y-scroll overflow-x-hidden pb-10 scrollbar-none text-white">
-        {/* menu fill section  */}
-        <div className="w-full flex flex-col items-center">
-          <button
-            onClick={() => {
-              handleModeMenu('FILL');
-            }}
-            className="py-1 mb-2  px-10 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
-          >
-            {modeMenu === 'FILL' ? (
-              <IoIosArrowUp size={20} />
-            ) : (
-              <IoIosArrowDown size={20} />
+    <div className="absolute  rounded-3xl p-1 z-20 right-1/2 translate-x-1/2 bottom-5 flex">
+      <div className="flex  gap-5 items-center overflow-y-scroll overflow-x-hidden  scrollbar-none text-white ">
+        {/* bagian 1 */}
+        <div className="flex gap-2 bg-slate-700 p-2 rounded-full">
+          {/* menu fill section  */}
+          <div className="flex flex-col items-center">
+            <button
+              onClick={() => {
+                handleModeMenu('FILL');
+              }}
+              className="p-2 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
+            >
+              <IoColorFill size={20} />
+            </button>
+            {modeMenu === 'FILL' && (
+              <div className='className="text-black absolute p-1 bg-blue-500 -top-[600%] text-black'>
+                <div className="w-0 h-0 border-t-[15px] border-x-[30px] border-x-transparent border-t-blue-900 absolute -bottom-[15px] left-1/2 -translate-x-1/2 z-30"></div>
+                <SketchPicker
+                  width="15rem"
+                  color={componentData.fill}
+                  onChange={e => handleChangeColor(e, 'fill')}
+                />
+              </div>
             )}
-            Fill
-          </button>
-          {modeMenu === 'FILL' && (
-            <SketchPicker
-              width="15rem"
-              color={componentData.fill}
-              onChange={e => handleChangeColor(e, 'fill')}
-              // onChangeComplete={e => handleChangeColor(e, 'fill')}
-              className="text-black"
-            />
-          )}
+          </div>
+          {/* menu stroke section */}
+          <div className="w-full flex flex-col items-center">
+            <button
+              onClick={() => handleModeMenu('STROKE')}
+              className="p-2 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
+            >
+              <MdBorderColor size={20} />
+            </button>
+            {modeMenu === 'STROKE' && (
+              <div className='className="text-black absolute p-1 bg-blue-500 -top-[600%] text-black'>
+                <div className="w-0 h-0 border-t-[15px] border-x-[30px] border-x-transparent border-t-blue-900 absolute -bottom-[15px] left-1/2 -translate-x-1/2 z-30"></div>
+                <SketchPicker
+                  width="15rem"
+                  color={componentData.stroke}
+                  onChange={e => handleChangeColor(e, 'stroke')}
+                  // onChangeComplete={e => handleChangeColor(e, 'stroke')}
+                  className="text-black"
+                />
+              </div>
+            )}
+          </div>
+          {/* menu stroke width section */}
+          <div className="w-full flex flex-col items-center">
+            <button
+              onClick={() => handleModeMenu('STROKE WIDTH')}
+              className="p-2 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
+            >
+              <BsBorderWidth size={20} />
+            </button>
+            {modeMenu === 'STROKE WIDTH' && (
+              <div className='className="text-black absolute p-1 bg-blue-500 -top-[90%] rounded-xl text-black'>
+                <div className="w-0 h-0 border-t-[15px] border-x-[30px] border-x-transparent border-t-blue-900 absolute -bottom-[15px] left-1/2 -translate-x-1/2 z-30"></div>
+                <div className="w-full flex gap-2 px-2">
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={componentData.strokeWidth}
+                    className="w-full text-black"
+                    name="strokeWidth"
+                    onChange={handleChangeValueData}
+                  />
+                  <input
+                    type="number"
+                    className="w-20 text-black p-1 rounded-xl text-right"
+                    value={componentData.strokeWidth}
+                    name="strokeWidth"
+                    min={0}
+                    max={100}
+                    onChange={handleChangeValueData}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-        {/* menu stroke section */}
-        <div className="w-full flex flex-col items-center">
+        {/* bagian 2 */}
+        <div className="w-full flex items-center gap-2 bg-slate-500 p-2 rounded-full">
           <button
-            onClick={() => handleModeMenu('STROKE')}
-            className="py-1 mb-2  px-10 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
+            type="button"
+            onClick={handleUpComponent}
+            className="rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center p-2"
           >
-            {modeMenu === 'STROKE' ? (
-              <IoIosArrowUp size={20} />
-            ) : (
-              <IoIosArrowDown size={20} />
-            )}
-            Stroke
+            <BsLayerForward size={20} />
           </button>
-          {modeMenu === 'STROKE' && (
-            <SketchPicker
-              width="15rem"
-              color={componentData.stroke}
-              onChange={e => handleChangeColor(e, 'stroke')}
-              // onChangeComplete={e => handleChangeColor(e, 'stroke')}
-              className="text-black"
-            />
-          )}
-        </div>
-        {/* menu stroke width section */}
-        <div className="w-full flex flex-col items-center">
           <button
-            onClick={() => handleModeMenu('STROKE WIDTH')}
-            className="py-1 mb-2  px-10 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
+            type="button"
+            onClick={handleDownComponent}
+            className="rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center p-2"
           >
-            {modeMenu === 'STROKE WIDTH' ? (
-              <IoIosArrowUp size={20} />
-            ) : (
-              <IoIosArrowDown size={20} />
-            )}
-            Stroke Width
+            <BsLayerBackward size={20} />
           </button>
-          {modeMenu === 'STROKE WIDTH' && (
-            <div className="w-full flex gap-2 px-2">
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={componentData.strokeWidth}
-                className="w-full text-black"
-                name="strokeWidth"
-                onChange={handleChangeValueData}
-              />
-              <input
-                type="number"
-                className="w-20 text-black p-1 rounded-xl text-right"
-                value={componentData.strokeWidth}
-                name="strokeWidth"
-                min={0}
-                max={100}
-                onChange={handleChangeValueData}
-              />
-            </div>
-          )}
         </div>
         {/* menu pos section */}
-        <div className="w-full flex flex-col items-center">
+        {/* <div className="w-full flex flex-col items-center">
           <button
             onClick={() => handleModeMenu('POS')}
             className="py-1 mb-2  px-10 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
@@ -196,7 +208,7 @@ export default function MenuCustom({
               </div>
             </div>
           )}
-        </div>
+        </div> */}
         {/* menu skala section */}
         {/* <div className="w-full flex flex-col items-center">
           <button
@@ -237,29 +249,6 @@ export default function MenuCustom({
           )}
         </div> */}
         {/* menu up atau down */}
-        <div className="w-full flex flex-col items-center">
-          <button
-            onClick={() => handleModeMenu('UP DOWN')}
-            className="py-1 mb-2  px-10 rounded-full bg-red-400 hover:bg-red-300 flex gap-2 items-center justify-center"
-          >
-            {modeMenu === 'UP DOWN' ? (
-              <IoIosArrowUp size={20} />
-            ) : (
-              <IoIosArrowDown size={20} />
-            )}
-            Diatas/Dibawah
-          </button>
-          {modeMenu === 'UP DOWN' && (
-            <div className="w-full flex gap-2 px-2">
-              <button type="button" onClick={handleUpComponent}>
-                Diatas
-              </button>
-              <button type="button" onClick={handleDownComponent}>
-                Dibawah
-              </button>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

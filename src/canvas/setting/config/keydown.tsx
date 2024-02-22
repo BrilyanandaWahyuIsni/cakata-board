@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 
 type KeydownDivProps = {
   sendData: (value: string[]) => void;
+  handleKeyDow: (value: boolean) => void;
 };
 
-export default function KeydownDiv({ sendData }: KeydownDivProps) {
+export default function KeydownDiv({
+  sendData,
+  handleKeyDow,
+}: KeydownDivProps) {
   const [keyValue, setKeyValue] = useState<string[]>([]);
 
   const handleClick = () => {
@@ -32,9 +36,11 @@ export default function KeydownDiv({ sendData }: KeydownDivProps) {
   }, []);
 
   return (
-    <div className="w-full h-full absolute z-40 flex justify-center items-center">
-      <div className="w-full text-center z-40">
-        <div className="mb-3">Ketikan Shortcut</div>
+    <div className="w-full h-full absolute z-40 flex justify-center items-center text-white">
+      <div className="w-full text-center z-40 flex flex-col items-center justify-center">
+        <h1 className="mb-3 text-3xl w-1/2 font-bold p-2 bg-stone-900 rounded-lg">
+          Ketikan Shortcut
+        </h1>
         <div className="w-full flex items-center justify-center">
           {keyValue.map((e, index) => {
             return index > 0 ? (
@@ -44,15 +50,24 @@ export default function KeydownDiv({ sendData }: KeydownDivProps) {
             );
           })}
         </div>
-        <button
-          onClick={handleClick}
-          type="button"
-          className="p-2 mb-3 px-5 bg-green-600 hover:bg-green-800 rounded-xl"
-        >
-          Save
-        </button>
+        <div className="flex gap-3 w-full items-center justify-center">
+          <button
+            onClick={handleClick}
+            type="button"
+            className="p-2 mb-3 px-5 bg-green-900 hover:bg-green-600 rounded-xl"
+          >
+            Save
+          </button>
+          <button
+            onClick={() => handleKeyDow(false)}
+            type="button"
+            className="p-2 mb-3 px-5 bg-red-900 hover:bg-red-600 rounded-xl"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
-      <div className="w-full h-full absolute opacity-80 bg-orange-500"></div>
+      <div className="w-full h-full absolute opacity-80 bg-slate-800"></div>
     </div>
   );
 }
